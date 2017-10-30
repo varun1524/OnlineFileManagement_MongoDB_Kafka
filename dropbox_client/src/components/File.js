@@ -97,7 +97,7 @@ class File extends Component {
         let fileArray = event.target.files;
         Array.from(fileArray).map((file)=>{
             console.log(file);
-            payload.append('mypic',file);
+            payload.append('mydata',file);
             return file;
         });
 

@@ -36,7 +36,7 @@ class MainPage extends Component {
                     this.setState({
                         ...this.state,
                         isLoggedIn: false,
-                        message: "Error while adding userdata"
+                        message: "Error while Signing Up"
                     });
                     // this.props.history.push("/signup")
                 }

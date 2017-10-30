@@ -2,15 +2,18 @@
 
 # dependencies
 /dropbox_client/node_modules
-/dropbox_server/node_modules
+/dropbox_kafka_frontend/node_modules
+/dropbox_kafka_backend/node_modules
 
 # testing
 /dropbox_client/coverage
-/dropbox_server/coverage
+/dropbox_kafka_frontend/coverage
+/dropbox_kafka_backend/coverage
 
 # production
 /dropbox_client/build
-/dropbox_server/build
+/dropbox_kafka_frontend/build
+/dropbox_kafka_backend/build
 
 # misc
 /dropbox_client/.DS_Store
@@ -18,15 +21,23 @@
 /dropbox_client/.env.development.local
 /dropbox_client/.env.test.local
 /dropbox_client/.env.production.local
-/dropbox_server/.DS_Store
-/dropbox_server/.env.local
-/dropbox_server/.env.development.local
-/dropbox_server/.env.test.local
-/dropbox_server/.env.production.local
+/dropbox_kafka_frontend/.DS_Store
+/dropbox_kafka_frontend/.env.local
+/dropbox_kafka_frontend/.env.development.local
+/dropbox_kafka_frontend/.env.test.local
+/dropbox_kafka_frontend/.env.production.local
+/dropbox_kafka_backend/.DS_Store
+/dropbox_kafka_backend/.env.local
+/dropbox_kafka_backend/.env.development.local
+/dropbox_kafka_backend/.env.test.local
+/dropbox_kafka_backend/.env.production.local
 
 /dropbox_client/npm-debug.log*
 /dropbox_client/yarn-debug.log*
 /dropbox_client/yarn-error.log*
-/dropbox_server/npm-debug.log*
-/dropbox_server/yarn-debug.log*
-/dropbox_server/yarn-error.log*
+/dropbox_kafka_frontend/npm-debug.log*
+/dropbox_kafka_frontend/yarn-debug.log*
+/dropbox_kafka_frontend/yarn-error.log*
+/dropbox_kafka_backend/npm-debug.log*
+/dropbox_kafka_backend/yarn-debug.log*
+/dropbox_kafka_backend/yarn-error.log*

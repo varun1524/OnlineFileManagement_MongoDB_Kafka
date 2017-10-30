@@ -14,20 +14,6 @@ class Activity extends Component{
         };
     }
 
-
-    getShareStatus = ((status) => {
-        if(status){
-            return(
-                <img src={favourite_filled} width="20" height="20" alt="Directory"/>
-            )
-        }
-        else {
-            return(
-                <img src={favourite_empty} width="20" height="20" alt="Directory"/>
-            )
-        }
-    });
-
     getActivityData = (()=>{
         API.getActivityData().then((response) =>{
             if(response.status===201){

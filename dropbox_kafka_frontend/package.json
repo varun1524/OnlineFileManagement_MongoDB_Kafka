@@ -19,6 +19,7 @@
     "cors": "^2.8.4",
     "passport-local":"^1.0.0",
     "kafka-node":"^2.2.3",
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "busboy": "^0.2.14"
   }
 }

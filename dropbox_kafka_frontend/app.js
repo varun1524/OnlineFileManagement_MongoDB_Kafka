@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var passport = require('passport');
 var cors = require('cors');
 require('./routes/passport')(passport);
@@ -28,12 +29,19 @@ app.use(logger('dev'));
 
 var corsOptions = {
     origin: 'http://localhost:3000',
-    credentials: true
+    credentials: true,
 };
 app.use(cors(corsOptions));
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
+// app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false },{limit: '5mb'}));
+// app.use(bodyParser.raw({limit: '5mb'}) );
+app.use( bodyParser.text({
+    type : 'application/json',
+    limit: '5mb'
+}) );
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -85,6 +93,7 @@ app.post('/login/doLogin', function(req, res) {
 
 app.get('/login/getSession', function(req, res) {
     try {
+        console.log(req.session.username);
         if(req.session.username!==undefined) {
             res.status(201).send(req.session);
         }

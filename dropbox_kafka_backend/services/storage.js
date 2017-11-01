@@ -5,29 +5,44 @@ let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 // let ObjectId = require('mongodb').ObjectID;
 
-insertIntoStorage = ((callback, name, path, type, username) => {
+insertIntoStorage = ((callback, name, path, type, username, bytedata) => {
     try{
         let ctime;
         // let mtime;
-        let size;
         fs.stat((path), function (err, stats) {
             let dataInserted=false;
             if (err) {
                 throw ("Error while fetching list of files/folders .Error: " + err)
             }
-            ctime = stats["ctime"].toISOString().slice(0, 19).replace('T', ' ');
-            size = stats["size"];
-
-            let insertData = {
-                name : name,
-                type : type,
-                path : path,
-                creationtime : ctime,
-                size : size,
-                ownerusername : username,
-                starred : false,
-                sharedstatus : false,
-            };
+            // ctime = stats["ctime"].toISOString().slice(0, 19).replace('T', ' ');
+            ctime = new Date();
+            // size = stats["size"];
+            let insertData;
+            if(type==="d"){
+                insertData = {
+                    name : name,
+                    type : type,
+                    path : path,
+                    creationtime : ctime,
+                    // size : size,
+                    ownerusername : username,
+                    starred : false,
+                    sharedstatus : false,
+                };
+            }
+            else if(type==="f"){
+                insertData = {
+                    name : name,
+                    type : type,
+                    path : path,
+                    creationtime : ctime,
+                    // size : size,
+                    ownerusername : username,
+                    starred : false,
+                    sharedstatus : false,
+                    filedata : bytedata
+                };
+            }
 
             mongo.connect(mongoURL, function () {
                 let storagecoll = mongo.collection("dropboxstorage");
@@ -41,7 +56,7 @@ insertIntoStorage = ((callback, name, path, type, username) => {
                             console.log("data inserted successfully");
                             dataInserted = true;
                             storagecoll.findOne({_id:results.insertedId},function (err, results1) {
-                                console.log(results1);
+                                // console.log(results1);
                                 if(err){
                                     console.log(err);
                                 }
@@ -85,7 +100,7 @@ doesExist = ((callback, name, path)=>{
                 }
                 if(results.length===0) {
                     console.log("Count: " + results.length);
-                    exists=false;
+                    exists = false;
                 }
                 callback(err, exists);
             });

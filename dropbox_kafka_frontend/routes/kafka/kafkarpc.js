@@ -12,6 +12,7 @@ function KafkaRPC(){
     this.requests = {}; //hash to store request in wait for response
     this.response_queue = false; //placeholder for the future queue
     this.producer = this.connection.getProducer();
+
 }
 
 KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
@@ -43,34 +44,17 @@ KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
     self.setupResponseQueue(self.producer,topic_name,function(){
         console.log('in response');
         //put the request on a topic
-        let payload;
-        if(topic_name==="test") {
-            // let data = {};
-            // data.path = content.body.path;
-            // data.username = content.body.username;
-            // data.service = "uploadfiles";
-            payloads = [
-                {
-                    topic: topic_name,
-                    messages: content,
-                    partition: 0
-                }
-            ];
-            console.log(payloads);
-        }
-        else {
-            payloads = [
-                {
-                    topic: topic_name,
-                    messages: JSON.stringify({
-                        correlationId: correlationId,
-                        replyTo: 'response_topic',
-                        data: content
-                    }),
-                    partition: 0
-                }
-            ];
-        }
+        let payloads = [
+            {
+                topic: topic_name,
+                messages: JSON.stringify({
+                    correlationId: correlationId,
+                    replyTo: 'response_topic',
+                    data: content
+                }),
+                partition: 0
+            }
+        ];
         console.log('in response1');
         console.log(self.producer.ready);
         self.producer.send(payloads, function(err, data){
@@ -96,6 +80,8 @@ KafkaRPC.prototype.setupResponseQueue = function(producer,topic_name, next){
     consumer.on('message', function (message) {
         console.log('msg received');
         var data = JSON.parse(message.value);
+        console.log("Data received from backend");
+        console.log(data);
         //get the correlationId
         var correlationId = data.correlationId;
         //is it a response to a pending request
@@ -107,6 +93,8 @@ KafkaRPC.prototype.setupResponseQueue = function(producer,topic_name, next){
             //delete the entry from hash
             delete self.requests[correlationId];
             //callback, no err
+            console.log("data received from back-edn");
+            console.log(data.data);
             entry.callback(null, data.data);
         }
     });

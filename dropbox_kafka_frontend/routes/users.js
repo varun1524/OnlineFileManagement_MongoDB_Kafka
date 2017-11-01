@@ -9,6 +9,7 @@ let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 // let ObjectId = require('mongodb').ObjectID;
 // let fse = require('fs-extra');
+Busboy = require('busboy');
 var kafka = require('./kafka/client');
 let filePath="";
 
@@ -65,7 +66,8 @@ router.post('/getDirData', function (req, res, next) {
         console.log(req.session.username);
         if(req.session.username!==null || req.session.username!==undefined) {
             req.body.username = req.session.username;
-            req.body.service = "getDirData  ";
+            req.body.service = "getDirData";
+            console.log(req.body);
             kafka.make_request('login_topic',req.body, function(err,results){
                 console.log('in result');
                 console.log(results);
@@ -694,18 +696,25 @@ router.post('/setdirPath', function (req, res, next) {
     }
 });
 
+
+//Sending ByteArray
 router.post('/upload', function (req, res, next) {
     try {
         if(req.session.username!==undefined) {
+            console.log("Upload");
+            console.log(req.body);
+            let data = req.body;
+            data.username = req.session.username;
 
-            // req.body.path = filePath;
-            // req.body.username = req.session.username;
-            // req.body.service = "uploadfiles";
-            // req.body.request = req;
-            // console.log(req);
+            console.log(data);
 
 
-            kafka.make_request('test', req, function(err,results){
+            data.map((file)=>{
+                file.username =  req.session.username;
+                console.log(file.filedata);
+            });
+
+            kafka.make_request('test', req.body, function(err,results){
                 console.log('in result');
                 console.log(results);
                 if(err){
@@ -730,16 +739,6 @@ router.post('/upload', function (req, res, next) {
                     }
                 }
             });
-
-            /*upload(req, res, function (err) {
-                // console.log(req.body);
-                if (err) {
-                    res.status(301).send({"message:":"Error while uploading files"});
-                } else {
-                    console.log("File Successfully Uploaded");
-                    res.status(201).send({"message": "File Successfully Uploaded"});
-                }
-            });*/
         }
         else {
             res.status(203).send({"message":"Session Expired. Login Again"});
@@ -750,6 +749,135 @@ router.post('/upload', function (req, res, next) {
         res.status(301).end();
     }
 });
+
+router.post('/downloadfile', function (req, res, next) {
+    try {
+        if(req.session.username!==undefined) {
+            console.log("Upload");
+            console.log(req.body);
+            let data = req.body;
+            data.username = req.session.username;
+            data.service = "downloadfile";
+            console.log(data);
+
+
+            kafka.make_request('login_topic', data, function(err,results){
+                console.log('in result');
+                console.log(results);
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+                else
+                {
+                    if(results.status === 201){
+                        console.log("Received username: "+results.username);
+                        console.log("Local username: "+ req.body.username);
+                        res.status(results.status).send(results.data);
+                    }
+                    else if(results.status === 204){
+                        res.status(results.status).send(results.message);
+                    }
+                    else if(results.status === 301){
+                        res.status(results.status).send(results.message);
+                    }
+                    else if(results.status === 401) {
+                        res.status(results.status).send({"message":"Fetching Directory Data Failed"});
+                    }
+                }
+            });
+        }
+        else {
+            res.status(203).send({"message":"Session Expired. Login Again"});
+        }
+    }
+    catch (e){
+        console.log(e);
+        res.status(301).end();
+    }
+});
+
+
+/*router.post('/upload', function (req, res, next) {
+    try {
+        if(req.session.username!==undefined) {
+
+
+            var fileChunk = null;
+            var filePayload = {
+                fileChunk: null,
+                fileName: null,
+                fileType: null,
+                filePath: filePath,
+                username: req.session.username
+            };
+
+            console.log("In File Upload");
+
+            var busboy = new Busboy({headers: req.headers});
+            // console.log(req,body.path);
+            busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+                // var saveTo = path.join(os.tmpDir(), path.basename(fieldname));
+                // file.pipe(fs.createWriteStream(saveTo));
+
+                console.log(filename);
+                console.log(file);
+
+                console.log("encoding");
+                console.log(encoding);
+                console.log(mimetype);
+
+                filePayload.fileName = filename;
+                filePayload.fieldName = fieldname;
+                filePayload.fileType = mimetype;
+                filePayload.encoding = encoding;
+                filePayload.file = file;
+
+                file.on('data', function (data) {
+
+                    console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
+                    filePayload.fileChunk += data;
+                    // console.log(fileChunk);
+                });
+
+                // console.log(filePayload.fileChunk);
+                // console.log(fileChunk);
+
+                file.on('end', function () {
+
+                    console.log('File [' + fieldname + '] got data completely');
+                    console.log(filePayload);
+                    kafka.make_request("test", filePayload, function (err, result) {
+                        console.log(err);
+                        console.log(result);
+
+                        if (err) {
+                            res.status(401).send();
+                        }
+                        else {
+                            res.status(201).send(result)
+                        }
+                    });
+
+                });
+
+            });
+
+            // console.log(req);
+            var formdata = new FormData();
+            formdata.append('req', req);
+
+            req.pipe(busboy);vr
+        }
+        else {
+            res.status(203).send({"message":"Session Expired. Login Again"});
+        }
+    }
+    catch (e){
+        console.log(e);
+        res.status(301).end();
+    }
+});*/
 
 router.post('/getActivityData', function (req, res, next) {
     try {

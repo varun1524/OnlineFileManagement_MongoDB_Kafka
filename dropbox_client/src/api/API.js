@@ -81,7 +81,41 @@ export const getDirectoryData = (payload) =>
             return error;
         });
 
+//Sending byte Array
 export const uploadFile = (payload) =>
+    fetch(`${api}/users/upload`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials:'include'
+    }).then(res => {
+        return res.status;
+    }).catch(error => {
+        console.log("This is error");
+        return error;
+    });
+
+//Sending byte Array
+export const downloadFile = (payload) =>
+    fetch(`${api}/users/downloadfile`, {
+        method: 'POST',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials:'include'
+    }).then(res => {
+        return res;
+    }).catch(error => {
+        console.log("This is error");
+        return error;
+    });
+
+/*export const uploadFile = (payload) =>
     fetch(`${api}/users/upload`, {
         method: 'POST',
         body: payload,
@@ -91,7 +125,7 @@ export const uploadFile = (payload) =>
     }).catch(error => {
         console.log("This is error");
         return error;
-    });
+    });*/
 
 export const createDirectory = (payload) =>
     fetch(`${api}/users/createDir`, {

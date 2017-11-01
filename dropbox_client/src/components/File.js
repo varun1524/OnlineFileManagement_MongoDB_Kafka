@@ -28,26 +28,26 @@ class File extends Component {
             id : item.id
         };
         API.deleteContent(itemid).then((response)=>{
-           if(response.status===201){
-               this.setState({
-                   ...this.state,
-                   message:"Deleted Successfuly"
-               });
-               this.fetchDirectoryData();
-           }
-           else if(response.status===203){
-               this.setState({
-                   ...this.state,
-                   message:"Session Expired. Sent to Login Screen"
-               });
-               this.props.handlePageChange("/home/login");
-           }
-           else if(response.status===301){
-               this.setState({
-                   ...this.state,
-                   message:"Delete Unsuccessful"
-               });
-           }
+            if(response.status===201){
+                this.setState({
+                    ...this.state,
+                    message:"Deleted Successfuly"
+                });
+                this.fetchDirectoryData();
+            }
+            else if(response.status===203){
+                this.setState({
+                    ...this.state,
+                    message:"Session Expired. Sent to Login Screen"
+                });
+                this.props.handlePageChange("/home/login");
+            }
+            else if(response.status===301){
+                this.setState({
+                    ...this.state,
+                    message:"Delete Unsuccessful"
+                });
+            }
         });
     });
 
@@ -61,38 +61,137 @@ class File extends Component {
         data.changeStatusTo = !(item.starred);
         console.log(data);
         API.changeStarredStatus(data).then((response)=>{
-           if(response.status===201){
-               response.json().then((data) => {
-                   let msg="";
-                   if(item.starred){
-                       msg= "Removed from Favourite";
-                   }
-                   else {
-                       msg= "Added to Favourite";
-                   }
+            if(response.status===201){
+                response.json().then((data) => {
+                    let msg="";
+                    if(item.starred){
+                        msg= "Removed from Favourite";
+                    }
+                    else {
+                        msg= "Added to Favourite";
+                    }
 
-                   this.setState({
-                       message: msg
-                   });
+                    this.setState({
+                        message: msg
+                    });
 
-                   this.fetchDirectoryData();
-               });
-           }
-           else if(response.status===203){
-               this.setState({
-                   message: "Session Expired. Login again."
-               });
-               this.props.handlePageChange("/");
-           }
-           else if(response.status===301){
-               this.setState({
-                   message: "Error while changing Favourite status"
-               });
-           }
+                    this.fetchDirectoryData();
+                });
+            }
+            else if(response.status===203){
+                this.setState({
+                    message: "Session Expired. Login again."
+                });
+                this.props.handlePageChange("/");
+            }
+            else if(response.status===301){
+                this.setState({
+                    message: "Error while changing Favourite status"
+                });
+            }
         });
     });
 
-    handleFileUpload = (event) => {
+    //Converting Uploaded file to bytearray and sending
+    handleFileUpload = ((event) => {
+        //Data Transfer with Byte Array
+        let path;
+        if(this.state.dirpath.trim()!=="" || this.state.dirpath!==undefined || this.state.dirpath!==null){
+            path = this.state.dirpath
+        }
+        else {
+            path = "";
+        }
+
+
+        let fileArray = event.target.files;
+        let fileReader;
+        let fileUploadData = [];
+        console.log(fileArray);
+        Array.from(fileArray).map((file)=>{
+            let temp = {};
+            console.log(file);
+            fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(file);
+            fileReader.onload = (() => {
+                var arrayBuffer = this.result;
+                var arrayData = new Uint8Array(arrayBuffer);
+
+                console.log(arrayBuffer);
+
+                // var blob = new Blob([arrayData]);
+                // console.log(blob);
+
+                // var base64 = String.fromCharCode.apply(null,arrayData);
+                // console.log(base64);
+
+                // binaryString = String.fromCharCode.apply(null, array);
+                // temp["filedata"] = blob;
+                temp["file"] = file;
+                temp["filename"] = file.name;
+                temp["size"] = file.size;
+                temp["filetype"] = file.type;
+                temp["path"] = path;
+                fileUploadData.push(temp);
+
+                if(fileUploadData.length === fileArray.length){
+                    console.log(fileUploadData);
+
+                    API.uploadFile(fileUploadData)
+                        .then((status) => {
+                            if (status === 201) {
+                                this.setState({
+                                    ...this.state,
+                                    message : "File uploaded successfully"
+                                });
+                                this.fetchDirectoryData();
+                                console.log("File uploaded successfully");
+                            }
+                            else if(status === 203){
+                                this.setState({
+                                    ...this.state,
+                                    message : "Session Expired. Redirecting to Login Page"
+                                });
+                                console.log("Session Timed Out");
+                                this.props.handlePageChange("/home/signup");
+                            }
+                            else if(status === 301){
+                                this.setState({
+                                    message : "Failed to upload files"
+                                });
+                                console.log("Error while uploading file");
+                            }
+                            else {
+                                console.log("File upload failed");
+                            }
+                        });
+
+                }
+
+
+                // console.log(arrayData);
+
+                // console.log(arrayBuffer);
+                // console.log(arrayBuffer.byteLength);
+
+                // binaryString = String.fromCharCode.apply(null, array);
+                // console.log(binaryString);
+
+                // var blob = new Blob([arrayData]);
+                // console.log(blob);
+                // var link = document.createElement('a');
+                // link.href = window.URL.createObjectURL(blob);
+                //
+                // link.download = file.name;
+                // link.click();
+            });
+
+        });
+    });
+
+    /*handleFileUpload = (event) => {
+        // const payload = new FormData();
+
         const payload = new FormData();
         let fileArray = event.target.files;
         Array.from(fileArray).map((file)=>{
@@ -141,7 +240,12 @@ class File extends Component {
                 this.props.handlePageChange("/");
             }
         });
-    };
+
+
+
+
+
+    };*/
 
     addDictionary = (()=> {
 
@@ -325,7 +429,37 @@ class File extends Component {
                     }
                 });
             }
-            else{
+            else if(item.type==="f"){
+                API.downloadFile({"fileid":item.id}).then((response)=>{
+                   console.log(response.status);
+
+                       if(response.status===201){
+                           response.json().then((data)=> {
+                               console.log(data);
+                               var blob = new Blob([data.filedata]);
+                               console.log(blob);
+                               var link = document.createElement('a');
+                               link.href = window.URL.createObjectURL(blob);
+                               link.download = data.name;
+                               link.click();
+                           });
+                       }
+                       else if(response.status===203){
+
+                       }
+                       else if(response.status===301){
+
+                       }
+                       // console.log(arrayData);
+
+                       // console.log(arrayBuffer);
+                       // console.log(arrayBuffer.byteLength);
+
+                       // binaryString = String.fromCharCode.apply(null, array);
+                       // console.log(binaryString);
+
+
+                });
                 console.log("You selected file");
             }
             console.log(state);
@@ -335,12 +469,12 @@ class File extends Component {
 
     showParentButton = (()=>{
         // if(this.state.dirpath!=="") {
-            return(
-                <input type="button" value=".."
-                       className="btn btn-link btn-group-lg" onClick={() => {
-                    this.redirectParentDirectory()
-                }}/>
-            )
+        return(
+            <input type="button" value=".."
+                   className="btn btn-link btn-group-lg" onClick={() => {
+                this.redirectParentDirectory()
+            }}/>
+        )
         // }
     });
 
@@ -350,7 +484,7 @@ class File extends Component {
                 console.log(this.props.path);
                 if(this.props.path!=="") {
                     this.setState({
-                       dirpath:this.props.path
+                        dirpath:this.props.path
                     });
                 }
                 this.fetchDirectoryData();

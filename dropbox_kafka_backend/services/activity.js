@@ -23,7 +23,7 @@ function insertIntoActivity (callback ,username ,activitytype ,itemid ,activityt
                 let storageactivity = mongo.collection("storageactivities");
 
                 storageactivity.insertOne(storageactivityData, function (err, results) {
-                    console.log(results);
+                    // console.log(results);
                     if (err) {
                         console.log(err);
                     }

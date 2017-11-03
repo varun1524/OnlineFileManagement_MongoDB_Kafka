@@ -29,6 +29,7 @@ handle_request = ((data, callback) =>{
                     tempObj["sharedstatus"] = results.sharedstatus;
                     tempObj["filedata"] = results.filedata;
                     response.status = 201;
+                    console.log(results.filedata);
                     response.username = data.username;
                     response.data = tempObj;
                     callback(null, response);

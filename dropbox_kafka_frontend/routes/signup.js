@@ -11,7 +11,7 @@ router.post('/doSignUp', function(req, res, next){
     try {
         req.body.service = "signup";
         console.log(req.body);
-        kafka.make_request('login_topic',req.body, function(err,results){
+        kafka.make_request('signup_topic',req.body, function(err,results){
             console.log('in result');
             console.log(results);
             if(err){

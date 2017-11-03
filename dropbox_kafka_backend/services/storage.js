@@ -5,7 +5,7 @@ let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 // let ObjectId = require('mongodb').ObjectID;
 
-insertIntoStorage = ((callback, name, path, type, username, bytedata) => {
+insertIntoStorage = ((callback, name, path, type, username, bytedata, size) => {
     try{
         let ctime;
         // let mtime;
@@ -36,7 +36,7 @@ insertIntoStorage = ((callback, name, path, type, username, bytedata) => {
                     type : type,
                     path : path,
                     creationtime : ctime,
-                    // size : size,
+                    size : size,
                     ownerusername : username,
                     starred : false,
                     sharedstatus : false,

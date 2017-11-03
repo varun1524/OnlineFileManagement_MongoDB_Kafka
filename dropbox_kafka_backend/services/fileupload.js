@@ -68,7 +68,7 @@ handle_request = ((data, callback) => {
 
             console.log(file.path);
             // console.log(file.bytedata);
-            console.log(file.filedata);
+            // console.log(file.filedata);
             console.log(file.filename);
             console.log(file.size);
             console.log(file.path);
@@ -87,12 +87,24 @@ handle_request = ((data, callback) => {
                                 throw err;
                             }
                             if (result) {
-                                // fs.write(dirpath + file.filename, file.filedata);
-                                console.log(file.filedata);
                                 fs.writeFile(dirpath+file.filename, file.filedata, (err) => {
                                     if (err) throw err;
                                     console.log('The file has been saved!');
                                 });
+
+                                // console.log(file.filedata);
+
+                               /* var fsfile = fs.createWriteStream(dirpath+file.filename);
+                                fsfile.on('error', function(err) { /!* error handling *!/ });
+                                // // file.filedata.map((v) => { fsfile.write(v.join(', ') + '\n'); });
+                                for (let i=0;i<file.size;i++){
+                                    fsfile.write(file.filedata[i]);
+                                    // console.log(file.filedata[i]);
+                                }
+                                // file.filedata.map((v) => { fsfile.write(v)});
+                                fsfile.end();*/
+
+                                // fs.createWriteStream(dirpath+"test/"+file.fileName, data.filedata);
                                 console.log("Successfully added " + file.filename + " into database");
                                 response.status = 201;
                                 response.message = "File successfully added";
@@ -105,11 +117,11 @@ handle_request = ((data, callback) => {
                         else {
                             console.log("Failed to add " + file.filename + " into database");
                         }
-                    }, file.filename, dirpath, "f", file.username, file.size, file.filedata);
+                    }, file.filename, dirpath, "f", file.username, file.filedata, file.size);
                 }
                 else {
                     console.log("File already exists in database");
-                    response.status = 301;
+                    response.status = 204;
                     response.message = "File already exist on given path";
                     callback(null, response);
                 }

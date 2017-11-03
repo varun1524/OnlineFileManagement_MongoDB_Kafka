@@ -14,22 +14,24 @@ console.log('server is running');
 consumer.on('message', function (message) {
 
     try {
-        if (message.topic === "test") {
-            console.log('message received');
-            console.log(message);
-            // console.log(JSON.parse(message.value));
 
-            // console.log(JSON.stringify(message.value));
-            var data = JSON.parse(message.value);
-            // console.log(data.username);
-            // console.log(data.data);
+        console.log('message received');
+        console.log(message);
+        console.log(message.value);
+        console.log(JSON.stringify(message.value));
+        var data = JSON.parse(message.value);
+
+        console.log(data);
+        console.log(data.replyTo);
+
+        if (message.topic === "upload_topic") {
             uploadFiles.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {
                         topic: "response_topic",
                         messages: JSON.stringify({
-                            correlationId:data.correlationId,
+                            correlationId: data.correlationId,
                             data: res
                         }),
                         partition: 0
@@ -41,134 +43,103 @@ consumer.on('message', function (message) {
                 });
             });
         }
-        else {
-
-
-            console.log('message received');
-            console.log(message);
-            console.log(message.value);
-            console.log(JSON.stringify(message.value));
-            var data = JSON.parse(message.value);
-
-            console.log(data);
-            console.log(data.replyTo);
-            //
-            // uploadFiles.handle_request(data.data, function (err, res) {
-            //     console.log('after handle'+res);
-            //     var payloads = [
-            //         { topic: data.replyTo,
-            //             messages:JSON.stringify({
-            //                 correlationId:data.correlationId,
-            //                 data : {}
-            //             }),
-            //             partition : 0
-            //         }
-            //     ];
-            //     producer.send(payloads, function(err, data){
-            //         console.log(data);
-            //         console.log(payloads);
-            //     });
-            // });
-
-            switch (data.data.service) {
-                case "signup":
-                    singup.handle_request(data.data, function (err, res) {
-                        console.log('after handle' + res);
-                        var payloads = [
-                            {
-                                topic: data.replyTo,
-                                messages: JSON.stringify({
-                                    correlationId: data.correlationId,
-                                    data: res
-                                }),
-                                partition: 0
-                            }
-                        ];
-                        producer.send(payloads, function (err, data) {
-                            console.log(data);
-                            console.log(payloads);
-                        });
-                        // return;
-                    });
-                    break;
-                case "login":
-                    login.handle_request(data.data, function (err, res) {
-                        console.log('after handle' + res);
-                        var payloads = [
-                            {
-                                topic: data.replyTo,
-                                messages: JSON.stringify({
-                                    correlationId: data.correlationId,
-                                    data: res
-                                }),
-                                partition: 0
-                            }
-                        ];
-                        producer.send(payloads, function (err, data) {
-                            console.log(data);
-                            console.log(payloads);
-                        });
-                        // return;
-                    });
-                    break;
-                case "createdir":
-                    createdir.handle_request(data.data, function (err, res) {
-                        console.log('after handle' + res);
-                        var payloads = [
-                            {
-                                topic: data.replyTo,
-                                messages: JSON.stringify({
-                                    correlationId: data.correlationId,
-                                    data: res
-                                }),
-                                partition: 0
-                            }
-                        ];
-                        producer.send(payloads, function (err, data) {
-                            console.log(data);
-                            console.log(payloads);
-                        });
-                    });
-                    break;
-                case "getDirData":
-                    console.log("getDirData");
-                    retrieveDirData.handle_request(data.data, function (err, res) {
-                        console.log('after handle' + res);
-                        var payloads = [
-                            {
-                                topic: data.replyTo,
-                                messages: JSON.stringify({
-                                    correlationId: data.correlationId,
-                                    data: res
-                                }),
-                                partition: 0
-                            }
-                        ];
-                        producer.send(payloads, function (err, data) {
-                            console.log(data);
-                            console.log(payloads);
-                        });
-                    });
-                    break;
-                case "downloadfile":
-                    downloadfile.handle_request(data.data, function (err, res) {
-                        console.log('after handle'+res);
-                        var payloads = [
-                            { topic: data.replyTo,
-                                messages:JSON.stringify({
-                                    correlationId:data.correlationId,
-                                    data : res
-                                }),
-                                partition : 0
-                            }
-                        ];
-                        producer.send(payloads, function(err, data){
-                            console.log(data);
-                            console.log(payloads);
-                        });
-                    });
-                    break;
-            }
+        if (message.topic === "signup_topic") {
+            singup.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(data);
+                    console.log(payloads);
+                });
+                // return;
+            });
+        }
+        if (message.topic === "login_topic") {
+            login.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(data);
+                    console.log(payloads);
+                });
+                // return;
+            });
+        }
+        if (message.topic === "createdirectory_topic") {
+            createdir.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(data);
+                    console.log(payloads);
+                });
+            });
+        }
+        if (message.topic === "retrievedirectory_topic") {
+            console.log("getDirData");
+            retrieveDirData.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(data);
+                    console.log(payloads);
+                });
+            });
+        }
+        if (message.topic === "download_topic"){
+            downloadfile.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(data);
+                    console.log(payloads);
+                });
+            });
         }
     }
     catch (e)

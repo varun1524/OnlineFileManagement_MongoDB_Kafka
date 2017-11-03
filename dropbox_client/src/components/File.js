@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as API from '../api/API';
 import ShowData from './ShowData';
+let fs = require('fs');
 // import '../../node_modules/elemental/less/elemental.less';
 // import { Button, Alert, Spinner, Modal, ModalBody, ModalFooter, ModalHeader } from 'elemental'
 
@@ -103,31 +104,53 @@ class File extends Component {
             path = "";
         }
 
+        let component = this;
 
         let fileArray = event.target.files;
         let fileReader;
         let fileUploadData = [];
+        fileReader = new FileReader();
+
         console.log(fileArray);
         Array.from(fileArray).map((file)=>{
             let temp = {};
             console.log(file);
-            fileReader = new FileReader();
-            fileReader.readAsArrayBuffer(file);
-            fileReader.onload = (() => {
+            // var arrayBuffer = this.result,
+            //     array = new Uint8Array(arrayBuffer),
+            //     binaryString = String.fromCharCode.apply(null, array);
+
+            // console.log(binaryString);
+
+            fileReader.readAsBinaryString(file);
+
+            fileReader.onload = function()  {
+                console.log(this.result);
                 var arrayBuffer = this.result;
-                var arrayData = new Uint8Array(arrayBuffer);
-
                 console.log(arrayBuffer);
-
-                // var blob = new Blob([arrayData]);
-                // console.log(blob);
-
+                // var arrayData = new Uint8Array(arrayBuffer);
+                // //
+                // console.log(arrayData);
+                // //
+                // // var blob = new Blob([arrayData]);
+                // // console.log(blob);
+                // let binaryString = String.fromCharCode.apply(null, arrayData);
+                // console.log(binaryString);
                 // var base64 = String.fromCharCode.apply(null,arrayData);
                 // console.log(base64);
 
                 // binaryString = String.fromCharCode.apply(null, array);
-                // temp["filedata"] = blob;
-                temp["file"] = file;
+                // console.log(arrayData.length);
+                temp["filedata"] = arrayBuffer;
+                // var blob = new Blob([arrayData]);
+                // console.log(blob);
+                // var link = document.createElement('a');
+                // link.href = window.URL.createObjectURL(blob);
+                // link.download = file.name;
+                // link.click();
+                // temp["filedatastring"] = this.result;
+                // fs.writeFile(file.name, file.filedatastring);
+                // fs.createWriteStream("test/"+file.name, this.result);
+                // temp["file"] = blob;
                 temp["filename"] = file.name;
                 temp["size"] = file.size;
                 temp["filetype"] = file.type;
@@ -135,28 +158,33 @@ class File extends Component {
                 fileUploadData.push(temp);
 
                 if(fileUploadData.length === fileArray.length){
-                    console.log(fileUploadData);
-
                     API.uploadFile(fileUploadData)
                         .then((status) => {
                             if (status === 201) {
-                                this.setState({
-                                    ...this.state,
+                                component.setState({
+                                    ...component.state,
                                     message : "File uploaded successfully"
                                 });
-                                this.fetchDirectoryData();
+                                component.fetchDirectoryData();
                                 console.log("File uploaded successfully");
                             }
+                            else if(status === 204){
+                                component.setState({
+                                    ...component.state,
+                                    message : "File already exist on this path            "
+                                });
+                            }
                             else if(status === 203){
-                                this.setState({
-                                    ...this.state,
+                                component.setState({
+                                    ...component.state,
                                     message : "Session Expired. Redirecting to Login Page"
                                 });
                                 console.log("Session Timed Out");
-                                this.props.handlePageChange("/home/signup");
+                                component.props.handlePageChange("/home/signup");
                             }
                             else if(status === 301){
-                                this.setState({
+                                component.setState({
+                                    ...component.state,
                                     message : "Failed to upload files"
                                 });
                                 console.log("Error while uploading file");
@@ -184,8 +212,7 @@ class File extends Component {
                 //
                 // link.download = file.name;
                 // link.click();
-            });
-
+            };
         });
     });
 
@@ -431,32 +458,34 @@ class File extends Component {
             }
             else if(item.type==="f"){
                 API.downloadFile({"fileid":item.id}).then((response)=>{
-                   console.log(response.status);
+                    console.log(response.status);
 
-                       if(response.status===201){
-                           response.json().then((data)=> {
-                               console.log(data);
-                               var blob = new Blob([data.filedata]);
-                               console.log(blob);
-                               var link = document.createElement('a');
-                               link.href = window.URL.createObjectURL(blob);
-                               link.download = data.name;
-                               link.click();
-                           });
-                       }
-                       else if(response.status===203){
+                    if(response.status===201){
+                        response.json().then((data)=> {
+                            console.log(data);
 
-                       }
-                       else if(response.status===301){
+                            var blob = new Blob([data.filedata]);
 
-                       }
-                       // console.log(arrayData);
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = data.name;
+                            link.click();
 
-                       // console.log(arrayBuffer);
-                       // console.log(arrayBuffer.byteLength);
+                        });
+                    }
+                    else if(response.status===203){
 
-                       // binaryString = String.fromCharCode.apply(null, array);
-                       // console.log(binaryString);
+                    }
+                    else if(response.status===301){
+
+                    }
+                    // console.log(arrayData);
+
+                    // console.log(arrayBuffer);
+                    // console.log(arrayBuffer.byteLength);
+
+                    // binaryString = String.fromCharCode.apply(null, array);
+                    // console.log(binaryString);
 
 
                 });

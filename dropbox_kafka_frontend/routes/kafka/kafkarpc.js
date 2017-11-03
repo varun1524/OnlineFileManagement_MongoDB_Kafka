@@ -77,6 +77,7 @@ KafkaRPC.prototype.setupResponseQueue = function(producer,topic_name, next){
 
     //subscribe to messages
     var consumer = self.connection.getConsumer('response_topic');
+
     consumer.on('message', function (message) {
         console.log('msg received');
         var data = JSON.parse(message.value);
@@ -93,8 +94,6 @@ KafkaRPC.prototype.setupResponseQueue = function(producer,topic_name, next){
             //delete the entry from hash
             delete self.requests[correlationId];
             //callback, no err
-            console.log("data received from back-edn");
-            console.log(data.data);
             entry.callback(null, data.data);
         }
     });

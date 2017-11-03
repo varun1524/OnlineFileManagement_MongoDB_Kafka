@@ -68,7 +68,7 @@ router.post('/getDirData', function (req, res, next) {
             req.body.username = req.session.username;
             req.body.service = "getDirData";
             console.log(req.body);
-            kafka.make_request('login_topic',req.body, function(err,results){
+            kafka.make_request('retrievedirectory_topic',req.body, function(err,results){
                 console.log('in result');
                 console.log(results);
                 if(err){
@@ -110,7 +110,7 @@ router.post('/createDir', function(req, res, next){
             req.body.username = req.session.username;
             req.body.service = "createdir";
             console.log(req.body);
-            kafka.make_request('login_topic',req.body, function(err,results){
+            kafka.make_request('createdirectory_topic',req.body, function(err,results){
                 console.log('in result');
                 console.log(results);
                 if(err){
@@ -293,52 +293,37 @@ router.post('/share', function (req, res, next) {
 
 router.post('/changestarredstatus', function (req, res, next) {
     try {
-        if(req.session.username!==undefined) {
-            /*let username = req.session.username;
-            console.log(JSON.stringify(req.body));
-            let itemid = req.body.id;
-            let changeStatusTo=req.body.changeStatusTo;
-            let findquery = {
-                _id : ObjectId(itemid)
-            };
-            let updatequery = {
-                $set:{starred : req.body.changeStatusTo}
-            };
-            console.log(findquery);
-            console.log(updatequery);
+        if(req.session.username!==undefined && req.session.username!==null) {
 
-            mongo.connect(mongoURL, function () {
-                let storagecoll = mongo.collection("dropboxstorage");
-                storagecoll.updateOne(findquery,updatequery,function (err, results) {
-                    // console.log(results);
-                    console.log(results.result.nModified);
-                    if (err) {
-                        console.log(err);
-                        throw err;
+            console.log(req.body);
+            let data = req.body;
+            data.username = req.session.username;
+
+            kafka.make_request('change_starredstatus', data, function(err,results){
+                console.log('in result');
+                console.log(results);
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+                else
+                {
+                    if(results.status === 201){
+                        console.log("Received username: "+results.username);
+                        console.log("Local username: "+ req.body.username);
+                        res.status(results.status).send(results.data);
                     }
-                    else if (results.result.nModified === 1) {
-                        console.log("Shared status updated to true successfully in dropboxstorage");
-                        let activityType;
-                        if(changeStatusTo) {
-                            activityType = "starred";
-                        }
-                        else {
-                            activityType = "unstarred";
-                        }
-                        act.insertIntoActivity(function (err, results2) {
-                            if(err){
-                                console.log(err);
-                            }
-                            console.log("Activity added : "+results2)
-                        }, username, activityType, itemid);
-                        res.status(201).send({"message":"starred status updated successfully"});
+                    else if(results.status === 204){
+                        res.status(results.status).send(results.message);
                     }
-                    else {
-                        console.log("Failed to update Starred status in dropboxstorage");
-                        res.status(301).json({"message": "Failed to Add in Starred"})
+                    else if(results.status === 301){
+                        res.status(results.status).send(results.message);
                     }
-                });
-            });*/
+                    else if(results.status === 401) {
+                        res.status(results.status).send({"message":"Fetching Directory Data Failed"});
+                    }
+                }
+            });
         }
         else {
             res.status(203).json({"message": "Session Expired. Login again"})
@@ -354,54 +339,47 @@ router.post('/getStarredData', function (req, res, next) {
     try {
         console.log(req.session.username);
         if(req.session.username!==null || req.session.username!==undefined) {
-            /*let username = req.session.username;
-            let clientPath = req.body.path;
-            let dirpath;
-            if (clientPath === "" || clientPath === null || clientPath === undefined || clientPath === "/") {
-                dirpath = ("./dropboxstorage/" + req.session.username + "/" );
-            }
-            else {
-                dirpath = ("./dropboxstorage/" + req.session.username + "/" + clientPath);
-            }
-            console.log(dirpath);
+            try {
+                if(req.session.username!==undefined && req.session.username!==null) {
 
-            let files = fs.readdirSync(dirpath);
-            console.log(files);
-            let jsonObj = [];
-            let i = 0;
+                    console.log(req.body);
+                    let data = req.body;
+                    data.username = req.session.username;
 
-            // dirpath=dirpath.replace("//","/");
-
-            mongo.connect(mongoURL, function () {
-                let storagecoll = mongo.collection("dropboxstorage");
-                storagecoll.find({$and:[{ownerusername:username},{starred:true}]}).toArray(function (err, results) {
-                    if(err){
-                        throw err;
-                    }
-                    else
-                    {
-                        if(results.length>0) {
-                            for (i = 0; i < results.length; i++) {
-                                let tempObj = {};
-                                console.log(results[i].path);
-                                tempObj["id"] = results[i]._id;
-                                tempObj["name"] = results[i].name;
-                                tempObj["path"] = results[i].path;
-                                tempObj["type"] = results[i].type;
-                                tempObj["ctime"] = results[i].creationtime;
-                                tempObj["size"] = results[i].size;
-                                tempObj["starred"] = results[i].starred;
-                                tempObj["sharedstatus"] = results[i].sharedstatus;
-                                jsonObj.push(tempObj);
+                    kafka.make_request('retrieve_starreddata', data, function(err,results){
+                        console.log('in result');
+                        console.log(results);
+                        if(err){
+                            console.log(err);
+                            throw err;
+                        }
+                        else
+                        {
+                            if(results.status === 201){
+                                console.log("Received username: "+results.username);
+                                console.log("Local username: "+ req.body.username);
+                                res.status(results.status).send(results.data);
                             }
-                            res.status(201).send(jsonObj);
+                            else if(results.status === 204){
+                                res.status(results.status).send(results.message);
+                            }
+                            else if(results.status === 301){
+                                res.status(results.status).send(results.message);
+                            }
+                            else if(results.status === 401) {
+                                res.status(results.status).send({"message":"Fetching Directory Data Failed"});
+                            }
                         }
-                        else {
-                            res.status(204).send({"message":"Directory is Empty"});
-                        }
-                    }
-                });
-            });*/
+                    });
+                }
+                else {
+                    res.status(203).json({"message": "Session Expired. Login again"})
+                }
+            }
+            catch (e){
+                console.log(e);
+                res.status(301).end();
+            }
         }
         else{
             res.status(203).send({"message":"Session Expired. Please Login Again"});
@@ -680,21 +658,21 @@ router.post('/removesharing', function (req, res, next) {
     }
 });
 
-router.post('/setdirPath', function (req, res, next) {
-    try {
-        if(req.session.username!==undefined){
-            filePath = req.body.path;
-            res.status(201).json({"message":"Path set for the directory"})
-        }
-        else{
-            res.status(203).json({"message":"Session Expired. Login again"})
-        }
-    }
-    catch (e){
-        console.log(e);
-        res.status(301).end();
-    }
-});
+// router.post('/setdirPath', function (req, res, next) {
+//     try {
+//         if(req.session.username!==undefined){
+//             filePath = req.body.path;
+//             res.status(201).json({"message":"Path set for the directory"})
+//         }
+//         else{
+//             res.status(203).json({"message":"Session Expired. Login again"})
+//         }
+//     }
+//     catch (e){
+//         console.log(e);
+//         res.status(301).end();
+//     }
+// });
 
 
 //Sending ByteArray
@@ -706,15 +684,15 @@ router.post('/upload', function (req, res, next) {
             let data = req.body;
             data.username = req.session.username;
 
-            console.log(data);
+            // console.log(data);
 
 
             data.map((file)=>{
                 file.username =  req.session.username;
-                console.log(file.filedata);
             });
 
-            kafka.make_request('test', req.body, function(err,results){
+
+            kafka.make_request('upload_topic', data, function(err,results){
                 console.log('in result');
                 console.log(results);
                 if(err){
@@ -754,14 +732,11 @@ router.post('/downloadfile', function (req, res, next) {
     try {
         if(req.session.username!==undefined) {
             console.log("Upload");
-            console.log(req.body);
             let data = req.body;
             data.username = req.session.username;
-            data.service = "downloadfile";
             console.log(data);
 
-
-            kafka.make_request('login_topic', data, function(err,results){
+            kafka.make_request('download_topic', data, function(err,results){
                 console.log('in result');
                 console.log(results);
                 if(err){
@@ -772,6 +747,7 @@ router.post('/downloadfile', function (req, res, next) {
                 {
                     if(results.status === 201){
                         console.log("Received username: "+results.username);
+                        console.log(results);
                         console.log("Local username: "+ req.body.username);
                         res.status(results.status).send(results.data);
                     }
@@ -796,7 +772,6 @@ router.post('/downloadfile', function (req, res, next) {
         res.status(301).end();
     }
 });
-
 
 /*router.post('/upload', function (req, res, next) {
     try {

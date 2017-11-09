@@ -1,6 +1,4 @@
 var fs = require('fs');
-var mongo = require("./mongo");
-var mongoURL = "mongodb://localhost:27017/dropbox";
 var act = require('./activity');
 var bcrypt = require('bcrypt');
 

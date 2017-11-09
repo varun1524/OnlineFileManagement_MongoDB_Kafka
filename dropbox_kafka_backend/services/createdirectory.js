@@ -8,7 +8,7 @@ let ObjectId = require('mongodb').ObjectID;
 let filePath="";
 let storage = require('./storage');
 
-handle_request = ((data, callback) => {
+handle5 = ((data, callback) => {
     let response = {};
     try{
         console.log("in create directory");
@@ -64,8 +64,8 @@ handle_request = ((data, callback) => {
         console.log(e);
         response.status = 301;
         response.message = e;
-        callback(err, response);
+        callback(e, response);
     }
 });
 
-exports.handle_request = handle_request;
+exports.handle5 = handle5;

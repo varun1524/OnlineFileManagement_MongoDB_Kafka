@@ -20,7 +20,7 @@ class EditProfile extends Component{
 
     handleSubmitProfileChange = (()=> {
         console.log(this.state);
-        API.changeProfile(this.state).then((response) => {
+        API.updateProfile(this.state).then((response) => {
             if(response.status===201){
                 console.log("Added successfully");
                 this.props.handlePageChange("/user/profile");

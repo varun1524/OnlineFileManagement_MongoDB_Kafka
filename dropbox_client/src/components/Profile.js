@@ -8,14 +8,14 @@ class Profile extends Component{
     constructor(){
         super();
         this.state = {
-            profiledata : {
+            /*profiledata : {
                 overview: "",
                 work: "",
                 education: "",
                 contact: "",
                 lifeevent: ""
-            },
-            recprofiledata:[]
+            },*/
+            recprofiledata:{}
         };
     }
 
@@ -25,7 +25,7 @@ class Profile extends Component{
                 response.json().then((data)=>{
                     console.log(data);
                     this.setState({
-                        ...this.state.recprofiledata,
+                        ...this.state,
                         recprofiledata : data
                     });
                     this.props.handlePageChange("/user/profile");
@@ -39,6 +39,15 @@ class Profile extends Component{
             }
         });
     }
+
+    getprofile = (()=>{
+        return(
+            <ShowProfileData
+                key={1}
+                item={this.state.recprofiledata}
+            />
+        )
+    });
 
     render(){
 
@@ -55,14 +64,7 @@ class Profile extends Component{
                                 />
                             </div>
                             <div>
-                                {
-                                    this.state.recprofiledata.map((item, index)=>{
-                                        return(<ShowProfileData
-                                            key={index}
-                                            item={item}
-                                        />)
-                                    })
-                                }
+                                {this.getprofile()}
                             </div>
                         </div>
                     )}/>

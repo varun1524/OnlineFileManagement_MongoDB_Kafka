@@ -11,7 +11,7 @@
   "dependencies": {
     "kafka-node": "^2.2.3",
     "passport": "^0.4.0",
-    "mongodb": "^2.2.31",
+    "mongodb": "^2.2.33",
     "passport-local":"^1.0.0",
     "bcrypt": "^1.0.3",
     "mongoose": "^4.12.4",

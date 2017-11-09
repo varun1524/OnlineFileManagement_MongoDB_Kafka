@@ -1,7 +1,7 @@
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 
-handle_request = ((data, callback) =>{
+handle3 = ((data, callback) =>{
     let response = {};
     try {
 
@@ -18,8 +18,6 @@ handle_request = ((data, callback) =>{
         }
         console.log(dirpath);
 
-        // let files = fs.readdirSync(dirpath);
-        // console.log(files);
         let jsonObj = [];
         let i = 0;
         dirpath=dirpath.replace("//","/");
@@ -29,7 +27,7 @@ handle_request = ((data, callback) =>{
                 path : dirpath
             };
             let storagecoll = mongo.collection("dropboxstorage");
-            storagecoll.find(itemPath).toArray(function(err,results){
+            storagecoll.find(itemPath,{filedata:0}).toArray(function(err,results){
                 console.log(results);
                 if(err){
                     throw err;
@@ -72,4 +70,4 @@ handle_request = ((data, callback) =>{
     }
 });
 
-exports.handle_request = handle_request;
+exports.handle3 = handle3;

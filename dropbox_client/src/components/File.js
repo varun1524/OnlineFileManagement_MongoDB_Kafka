@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as API from '../api/API';
 import ShowData from './ShowData';
-let fs = require('fs');
 // import '../../node_modules/elemental/less/elemental.less';
 // import { Button, Alert, Spinner, Modal, ModalBody, ModalFooter, ModalHeader } from 'elemental'
 
@@ -63,21 +62,18 @@ class File extends Component {
         console.log(data);
         API.changeStarredStatus(data).then((response)=>{
             if(response.status===201){
-                response.json().then((data) => {
-                    let msg="";
-                    if(item.starred){
-                        msg= "Removed from Favourite";
-                    }
-                    else {
-                        msg= "Added to Favourite";
-                    }
-
-                    this.setState({
-                        message: msg
-                    });
-
-                    this.fetchDirectoryData();
+                console.log(data);
+                let msg="";
+                if(item.starred){
+                    msg= "Removed from Favourite";
+                }
+                else {
+                    msg= "Added to Favourite";
+                }
+                this.setState({
+                    message: msg
                 });
+                this.fetchDirectoryData();
             }
             else if(response.status===203){
                 this.setState({
@@ -109,10 +105,10 @@ class File extends Component {
         let fileArray = event.target.files;
         let fileReader;
         let fileUploadData = [];
-        fileReader = new FileReader();
 
         console.log(fileArray);
         Array.from(fileArray).map((file)=>{
+            fileReader = new FileReader();
             let temp = {};
             console.log(file);
             // var arrayBuffer = this.result,

@@ -15,9 +15,12 @@ class User extends Component {
         super();
         this.state = {
             path : "",
+
             // modelIsOpen : true
         };
     }
+
+
 
     redirectToFile = ((path) => {
         this.setState({
@@ -112,6 +115,7 @@ class User extends Component {
 
     componentWillUpdate(){
         // this.fetchDirectoryData(this.state.dirpath);
+
     }
 
     shouldComponentUpdate(){
@@ -192,6 +196,9 @@ class User extends Component {
                                                 this.props.handlePageChange("/user/file");
                                             })}>Files</button>
                                         </div>
+                                        <div className="row">
+                                            <button className="btn-link" onClick={(()=>{this.props.handlePageChange("/user/group");})}>Groups</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -217,13 +224,13 @@ class User extends Component {
                                             />
                                         </div>
                                     )}/>
-                                    <Route path="/user/groups" render={() => (
+                                    <Route path="/user/group" render={() => (
                                         <div>
                                             <Group
                                                 username={this.props.username}
+                                                groupSelected = {this.groupSelected}
                                                 handlePageChange={this.props.handlePageChange}
-                                                redirectToFile = {this.redirectToFile}
-                                                handleShare = {this.handleShare}
+                                                groups = {this.state.groups}
                                             />
                                         </div>
                                     )}/>
@@ -240,6 +247,8 @@ class User extends Component {
                                             <EditProfile
                                                 username={this.props.username}
                                                 handlePageChange={this.props.handlePageChange}
+                                                handleSubmitProfileChange = {this.handleSubmitProfileChange}
+                                                profiledata = {this.state.profile}
                                             />
                                         </div>
                                     )}/>

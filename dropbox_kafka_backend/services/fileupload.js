@@ -58,7 +58,7 @@ let st = require('./storage');
 
 let upload = multer({storage:storage}).any();*/
 
-handle_request = ((data, callback) => {
+handle1 = ((data, callback) => {
     let response ={};
     try {
         console.log("In File Upload");
@@ -128,22 +128,6 @@ handle_request = ((data, callback) => {
             }, file.filename, dirpath);
 
         });
-
-        // console.log(JSON.stringify(data));
-        // console.log(data.request);
-        // upload(data, null, function (err) {
-        //     // console.log(req.body);
-        //     if (err) {
-        //         response.status = 301;
-        //         response.message = "Error while uploading files : " + err;
-        //         throw err;
-        //     } else {
-        //         console.log("File Successfully Uploaded");
-        //         response.status = 201;
-        //         response.message = "File Successfully Uploaded";
-        //         callback(null, response);
-        //     }
-        // });
 
     }
     catch (e){
@@ -270,4 +254,4 @@ handle_request = ((data, callback) => {
 //     }
 // });
 
-exports.handle_request = handle_request;
+exports.handle1 = handle1;

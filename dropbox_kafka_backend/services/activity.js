@@ -1,10 +1,8 @@
-// var mysql = require('./mysql');
-// var router = express.Router();
 var mongo = require("./mongo");
 var mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;
 
-function insertIntoActivity (callback ,username ,activitytype ,itemid ,activitytime){
+insertIntoActivity = ((callback ,username ,activitytype ,itemid ,activitytime) => {
     try{
         let dataInserted=false;
 
@@ -42,7 +40,6 @@ function insertIntoActivity (callback ,username ,activitytype ,itemid ,activityt
         }
         else {
 
-            activitytime = new Date().toISOString().slice(0, 19).replace('T', ' ');
             let useractivityData = {
                 activitytype : activitytype,
                 username : username,
@@ -75,7 +72,113 @@ function insertIntoActivity (callback ,username ,activitytype ,itemid ,activityt
     catch (e){
         console.log(e);
     }
-}
+});
+
+handle_request = ((data, callback)=>{
+    let response = {};
+    try {
+        if(data.username!==null || data.username!==undefined) {
+            let username = data.username;
+
+            let jsonObj = [];
+
+            mongo.connect(mongoURL, function () {
+                let useractivitycoll = mongo.collection("useractivities");
+                let storageactivitycoll = mongo.collection("storageactivities");
+                useractivitycoll.find({$and:[{username:username},{activitytype:"signup"}]}).toArray(function (err, results) {
+                    console.log(results);
+                    if(err){
+                        console.log("Error while fetting account creation data");
+                        throw err;
+                    }
+                    if(results.length===1) {
+                        let tempObj={};
+                        tempObj["activitytype"] = results[0].activitytype;
+                        tempObj["activitytime"] = results[0].activitytime;
+                        tempObj["username"] = results[0].username;
+                        jsonObj.push(tempObj);
+
+                        useractivitycoll.find({$and:[{username:username},{activitytype:"login"}]}).sort({activitytime:-1}).limit(4).toArray(function (err, results1) {
+                            console.log(results1);
+                            if(err){
+                                console.log(err);
+                                throw err;
+                            }
+                            else
+                            {
+                                if(results1.length>0) {
+                                    for (i = 0; i < results1.length; i++) {
+                                        let tempObj = {};
+                                        tempObj["activitytype"] = results1[i].activitytype;
+                                        tempObj["activitytime"] = results1[i].activitytime;
+                                        jsonObj.push(tempObj);
+                                    }
+
+                                    storageactivitycoll.find({username:username}).sort({activitytime:-1}).limit(5).toArray(function (err, results2) {
+                                        console.log(results2);
+                                        if (err) {
+                                            throw err;
+                                        }
+                                        if (results2.length > 0) {
+                                            let count = 0;
+                                            let storagecoll = mongo.collection("dropboxstorage");
+                                            for (i = 0; i < results2.length; i++) {
+                                                let tempObj = {};
+                                                tempObj["activitytype"] = results2[i].activitytype;
+                                                tempObj["activitytime"] = results2[i].activitytime;
+
+                                                storagecoll.find({_id:ObjectId(results2[i].itemid)}).toArray(function (err, results3) {
+                                                    console.log(results3);
+                                                    if (err) {
+                                                        console.log(err);
+                                                        throw "Error while fetching file/folder name";
+                                                    }
+                                                    if(results3.length===1){
+                                                        tempObj["name"] = results3[0].name;
+                                                        tempObj["type"] = results3[0].type;
+                                                        jsonObj.push(tempObj);
+                                                        count++;
+                                                        console.log("i:" + i);
+                                                        if (count === results2.length) {
+                                                            console.log(i + ":" + results2.length);
+                                                            response.status = 201;
+                                                            response.data = jsonObj;
+                                                            callback(null, response);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                            console.log(jsonObj);
+                                        }
+                                        else if (results2.length === 0) {
+                                            response.status = 201;
+                                            response.data = jsonObj;
+                                            callback(null, response);
+                                        }
+                                    });
+                                }
+                                else {
+                                    response.status = 301;
+                                    response.data = jsonObj;
+                                    response.message = "Unrecognized Error. No activity found";
+                                    callback(null, response);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    }
+    catch (e){
+        console.log("error: ");
+        console.log(e);
+        response.status = 301;
+        response.message = "Error while fetching user activity data";
+        callback(e, response);
+    }
+});
 
 exports.insertIntoActivity = insertIntoActivity;
+exports.handle_request = handle_request;
 // module.exports = router;

@@ -2,17 +2,15 @@ let act = require('./activity');
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;
-// let fse = require('fs-extra');
-let filePath="";
 
 
-handle_request((data, callback) => {
+handle4=((data, callback) => {
     let response = {};
     try {
-        if(data.username!==undefined || data.username!==null || data.username!=="") {
+        if(data.username!==undefined && data.username!==null && data.username!=="") {
             let username = data.username;
             let itemid = data.id;
-            let changeStatusTo=data.changeStatusTo;
+            let changeStatusTo= data.changeStatusTo;
             let findquery = {
                 _id : ObjectId(itemid)
             };
@@ -49,7 +47,6 @@ handle_request((data, callback) => {
                             response.message="Starred status updated successfully";
                             callback(null, response);
                         }, username, activityType, itemid);
-
                     }
                     else {
                         console.log("Failed to update Starred status in dropboxstorage");
@@ -74,5 +71,5 @@ handle_request((data, callback) => {
     }
 });
 
-exports.handle_request = handle_request;
+exports.handle4 = handle4;
 

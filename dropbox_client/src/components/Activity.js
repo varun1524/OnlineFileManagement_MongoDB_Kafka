@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import favourite_empty from "../images/favourite_empty.png"
-import favourite_filled from "../images/favourite_filled.png";
 import ShowActivity from './ShowActivity';
 import * as API from '../api/API';
 

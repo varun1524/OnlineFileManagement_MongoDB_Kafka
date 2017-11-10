@@ -8,7 +8,7 @@ class ShowGroups extends Component{
         if (item.owner !== undefined && item.owner!==null && item.owner!==""){
             return (
                 <button className="btn btn-link" onClick={() => {
-                    this.props.handleDelete(item)
+                    this.props.handleDeleteGroup(item)
                 }}>
                     <img src={Delete} alt="delete" width="15" height="15"/>
                 </button>

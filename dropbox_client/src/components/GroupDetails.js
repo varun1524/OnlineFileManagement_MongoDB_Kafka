@@ -51,11 +51,28 @@ class GroupDetails extends Component {
         });
     });
 
-    handleDelete = ((item)=>{
-        let itemid = {
-            id : item.id,
+    handleDeleteData = ((item)=>{
+        let data = {
+            itemid : item.id,
             groupid : this.state.groupid
         };
+        API.deletecontentfromgroup(data).then((response)=>{
+           console.log(response.status);
+           if(response.status===201){
+               this.setState({
+                   ...this.state,
+                   message:"Data Removed Successfully"
+               });
+               // this.fetchSelectedDirectoryData({id:this.state.parentid});
+           }
+           else if(response.status===301){
+                this.setState({
+                    ...this.state,
+                    message:"Failed to remove selected data"
+                });
+                // this.fetchSelectedDirectoryData({id:this.state.parentid});
+           }
+        });
         /*API.deleteContentFromGroup(itemid).then((response)=>{
             if(response.status===201){
                 this.setState({
@@ -78,6 +95,40 @@ class GroupDetails extends Component {
                 });
             }
         });*/
+    });
+
+    handleDeleteMember = ((member)=>{
+        console.log(member);
+        API.deleteMember({
+            groupid:this.state.groupid,
+            member:member.username}
+        ).then((response)=>{
+            console.log(response.status);
+            if(response.status===201){
+
+                    response.json().then((msg)=>{
+                        this.setState({
+                            ...this.state,
+                            message:msg.message
+                        });
+                    });
+                    this.fetchGroupMembers();
+            }
+            else if(response.status===301){
+                response.json().then((msg)=>{
+                    this.setState({
+                        ...this.state,
+                        message:msg.message
+                    });
+                });
+                response.json().then((msg)=>{
+                    console.log(msg);
+                });
+            }
+            else {
+                console.log("error");
+            }
+        })
     });
 
     fetchGroupAccessDetails = (()=>{
@@ -403,7 +454,7 @@ class GroupDetails extends Component {
     });
 
     showParentButton = (()=>{
-        if(this.state.parentid!=="") {
+        if(this.state.parentid!==this.state.groupid) {
             return(
                 <input type="button" value=".."
                        className="btn btn-link btn-group-lg" onClick={() => {
@@ -437,9 +488,18 @@ class GroupDetails extends Component {
         });
     }
 
+    showAddMemberButton = (()=>{
+        if(this.state.useraccess==="admin") {
+            return (
+                <input type="button" className="btn btn-primary pull-left" value="Add Member"
+                       onClick={() => this.addMembers()}/>
+            )
+        }
+    });
+
     showDataUpload = ((access)=>{
         console.log(access);
-        if(access==="write" || access==="admin") {
+        if(access==="admin" || access==="write") {
             return (
                 <div className="container-fluid right">
                     <div className="row">
@@ -535,7 +595,8 @@ class GroupDetails extends Component {
                                             return(<ShowGroupStorage
                                                 key={index}
                                                 item={item}
-                                                handleDelete = {this.handleDelete}
+                                                handleDeleteData = {this.handleDeleteData}
+                                                access = {this.state.useraccess}
                                                 fetchSelectedDirectoryData = {this.fetchSelectedDirectoryData}
                                             />)
                                         })
@@ -550,9 +611,8 @@ class GroupDetails extends Component {
                         </div>
                         <div className="row" id="example">
                             <div className="table table-responsive ">
+                                {this.showAddMemberButton()}
 
-                                <input type="button" className="btn btn-primary pull-left" value="Add Member"
-                                       onClick={()=>this.addMembers()}/>
                                 <table className="table table-responsive text-justify ">
                                     <thead>
                                     <tr>
@@ -566,7 +626,8 @@ class GroupDetails extends Component {
                                             return(<ShowGroupMembers
                                                 key={index}
                                                 item={item}
-                                                handleDelete = {this.handleDelete}
+                                                handleDeleteMember = {this.handleDeleteMember}
+                                                access = {this.state.useraccess}
                                             />)
                                         })
                                     }

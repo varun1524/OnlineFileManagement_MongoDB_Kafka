@@ -41,9 +41,20 @@ class ShowGroupMembers extends Component{
         }
     });
 
+    showdeleteoptionforadmin = ((item, access)=>{
+        if(access==="admin" && item.access!=="admin"){
+            return(
+                <button className="btn btn-link" onClick={()=>{this.props.handleDeleteMember(item)}}>
+                    <img src={Delete} alt="delete" width="15" height="15"/>
+                </button>
+            )
+        }
+    });
+
     render(){
 
         const {item} = this.props;
+        console.log(item);
 
         return(
             <tbody>
@@ -59,11 +70,7 @@ class ShowGroupMembers extends Component{
                     {item.access}
                 </td>
 
-                <td >
-                    <button className="btn btn-link" onClick={()=>{this.props.handleDelete(item)}}>
-                        <img src={Delete} alt="delete" width="15" height="15"/>
-                    </button>
-                </td>
+                    {this.showdeleteoptionforadmin(item, this.props.access)}
             </tr>
             </tbody>
         );

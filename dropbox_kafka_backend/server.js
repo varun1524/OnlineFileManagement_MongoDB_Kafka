@@ -23,6 +23,10 @@ let fileuploadingroup = require('./services/fileuploadingroup');
 let addmembersingroup = require('./services/addmembersingroup');
 let getgroupmembers = require('./services/retrievegroupmembers');
 let getusergroupaccess = require('./services/fetchusergroupaccess');
+let deletegroup = require('./services/deletegroup');
+let deletemember = require('./services/deletememberfromgroup');
+let deletecontentfromgroup = require('./services/deletecontentfromgroup');
+
 // var consumer = connection.getConsumer();
 let loginConsumer = connection.getConsumerObj("login_topic");
 let signupConsumer = connection.getConsumerObj("signup_topic");
@@ -48,7 +52,9 @@ let uploadfileingroupConsumer = connection.getConsumerObj("uploadingroup_topic")
 let addmembersingroupConsumer = connection.getConsumerObj("addmembersingroup_topic");
 let getgroupmembersConsumer = connection.getConsumerObj("retrievegroupmembers_topic");
 let getusergroupaccessConsumer = connection.getConsumerObj("fetchusergroupaccess_topic");
-
+let deletegroupConsumer = connection.getConsumerObj("deletegroup_topic");
+let deletememberConsumer = connection.getConsumerObj("deletemember_topic");
+let deletecontentfromgroupConsumer = connection.getConsumerObj("deletecontentfromgroup_topic");
 
 
 let producer = connection.getProducer();
@@ -327,7 +333,6 @@ try {
             });
         }
     });
-
 
     datasharedbyuserConsumer.on('message', function (message) {
         console.log('message received');
@@ -751,11 +756,94 @@ try {
             });
         }
     });
+
+    deletegroupConsumer.on('message', function (message) {
+        console.log('message received');
+        console.log(message);
+        console.log(message.value);
+        console.log(JSON.stringify(message.value));
+        var data = JSON.parse(message.value);
+
+        console.log(data.replyTo);
+        if (message.topic === "deletegroup_topic") {
+            deletegroup.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(payloads);
+                });
+            });
+        }
+    });
+
+    deletememberConsumer.on('message', function (message) {
+        console.log('message received');
+        console.log(message);
+        console.log(message.value);
+        console.log(JSON.stringify(message.value));
+        var data = JSON.parse(message.value);
+
+        console.log(data.replyTo);
+        if (message.topic === "deletemember_topic") {
+            deletemember.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(payloads);
+                });
+            });
+        }
+    });
+
+    deletecontentfromgroupConsumer.on('message', function (message) {
+        console.log('message received');
+        console.log(message);
+        console.log(message.value);
+        console.log(JSON.stringify(message.value));
+        var data = JSON.parse(message.value);
+
+        console.log(data.replyTo);
+        if (message.topic === "deletecontentfromgroup_topic") {
+            deletecontentfromgroup.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(payloads);
+                });
+            });
+        }
+    });
 }
 catch (e){
     console.log(e)
 }
-
 
 /*
 consumer.on('message', function (message) {

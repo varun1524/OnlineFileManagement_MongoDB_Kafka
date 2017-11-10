@@ -468,6 +468,56 @@ export const deleteContent = (payload) =>
         return error;
     });
 
+export const deleteGroup = (payload) =>
+    fetch (`${api}/group/deletegroup`,
+        {
+            method: 'POST',
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }).then(res => {
+        return res;
+    }).catch(error => {
+        console.log("Error: " + error);
+        return error;
+    });
+
+export const deleteMember = (payload) =>
+    fetch (`${api}/group/deletemember`,
+        {
+            method: 'POST',
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }).then(res => {
+        return res;
+    }).catch(error => {
+        console.log("Error: " + error);
+        return error;
+    });
+
+export const deletecontentfromgroup = (payload) =>
+    fetch (`${api}/group/deletecontent`,
+        {
+            method: 'POST',
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        }).then(res => {
+        return res;
+    }).catch(error => {
+        console.log("Error: " + error);
+        return error;
+    });
 // export const fetchSelectedDataSharedWithUser = (payload) =>
 //     fetch (`${api}/users/accessSelectedSharedData`,
 //         {

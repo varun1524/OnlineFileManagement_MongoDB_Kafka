@@ -80,57 +80,66 @@ handle_request = ((data, callback) => {
                     }
                     console.log("result");
                     console.log(result[0].storage);
-                    if(result[0].storage.length===1){
-                        let tempid = result[0].storage[0].parentid;
-                        group.aggregate([
-                            {$match: {'_id': ObjectId(data.groupid)}},
-                            {$project: {
-                                storage: {$filter: {
-                                    input: '$storage',
-                                    as: 'store',
-                                    cond: {$eq: ['$$store.parentid', tempid]}}}
-                            }}
-                        ], function (err, result) {
-                            console.log("result after parent");
-                            console.log(result[0].storage);
-                            if(result[0].storage!==null){
+                    if(result[0].storage!==null && result[0].storage!==undefined){
 
+                        if(result[0].storage.length===1){
+                            let tempid = result[0].storage[0].parentid;
+                            group.aggregate([
+                                {$match: {'_id': ObjectId(data.groupid)}},
+                                {$project: {
+                                    storage: {$filter: {
+                                        input: '$storage',
+                                        as: 'store',
+                                        cond: {$eq: ['$$store.parentid', tempid]}}}
+                                }}
+                            ], function (err, result) {
+                                console.log("result after parent");
                                 console.log(result[0].storage);
-                                if(result[0].storage.length>0) {
-                                    let store = result[0].storage;
-                                    for (i = 0; i < store.length; i++) {
-                                        let tempObj = {};
-                                        tempObj["id"] = store[i]._id;
-                                        tempObj["name"] = store[i].name;
-                                        tempObj["type"] = store[i].type;
-                                        tempObj["ctime"] = store[i].creationtime;
-                                        jsonObj.data.push(tempObj);
+                                if(result[0].storage!==null){
+
+                                    console.log(result[0].storage);
+                                    if(result[0].storage.length>0) {
+                                        let store = result[0].storage;
+                                        for (i = 0; i < store.length; i++) {
+                                            let tempObj = {};
+                                            tempObj["id"] = store[i]._id;
+                                            tempObj["name"] = store[i].name;
+                                            tempObj["type"] = store[i].type;
+                                            tempObj["ctime"] = store[i].creationtime;
+                                            jsonObj.data.push(tempObj);
+                                        }
+                                        jsonObj.parentid=tempid;
+                                        console.log("json");
+                                        console.log(jsonObj);
+                                        response.status=201;
+                                        response.data=jsonObj;
+                                        callback(null,response);
                                     }
-                                    jsonObj.parentid=tempid;
-                                    console.log("json");
-                                    console.log(jsonObj);
-                                    response.status=201;
-                                    response.data=jsonObj;
-                                    callback(null,response);
+                                    else {
+                                        response.status=301;
+                                        response.message="Error while navigating to parent directory";
+                                        callback(null, response);
+                                    }
                                 }
                                 else {
-                                    response.status=301;
-                                    response.message="Error while navigating to parent directory";
+                                    response.status=205;
+                                    response.message="Group is Empty";
                                     callback(null, response);
                                 }
-                            }
-                            else {
-                                response.status=205;
-                                response.message="Group is Empty";
-                                callback(null, response);
-                            }
-                        });
+                            });
+                        }
+                        else {
+                            console.log("unrecognized error");
+                            response.message="Unrecognized Error";
+                            response.status=301;
+                            callback(null, response);
+                        }
                     }
                     else {
-                        console.log("unrecognized error");
+                        response.message="Unrecognized Error";
+                        response.status=301;
+                        callback(null, response);
                     }
-
-
                 });
             }
         });

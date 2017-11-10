@@ -110,32 +110,32 @@ class Group extends Component {
         });
     });
 
-    handleDelete = ((item)=>{
-        /*let itemid = {
-            groupid : item.groupid
-        };
-        API.deleteGroup(itemid).then((response)=>{
+    handleDeleteGroup = ((group)=>{
+        console.log(group);
+        API.deleteGroup({groupid:group.groupid}).then((response)=>{
+            console.log(response.status);
             if(response.status===201){
-                this.setState({
-                    ...this.state,
-                    message:"Group Deleted Successfuly"
-                });
-                this.fetchGroups();
+                response.json().then((data)=>{
+                    this.setState({
+                        ...this.state,
+                        message : data+ "group removed"
+                    });
+                    this.fetchGroups();
+                })
             }
             else if(response.status===203){
-                this.setState({
-                    ...this.state,
-                    message:"Session Expired. Sent to Login Screen"
-                });
-                this.props.handlePageChange("/home/login");
+                console.log("Session Expired. Redirecting to Login");
+                this.props.handlePageChange("/");
             }
             else if(response.status===301){
-                this.setState({
-                    ...this.state,
-                    message:"Delete Unsuccessful"
-                });
+                response.json().then((data)=>{
+                    this.setState({
+                        ...this.state,
+                        message : data.message
+                    })
+                })
             }
-        });*/
+        });
     });
 
     componentWillMount(){
@@ -236,7 +236,7 @@ class Group extends Component {
                                                             return(<ShowGroups
                                                                 key={index}
                                                                 item={item}
-                                                                handleDelete = {this.handleDelete}
+                                                                handleDeleteGroup = {this.handleDeleteGroup}
                                                             />)
                                                         })
                                                     }

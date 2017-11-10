@@ -41,6 +41,23 @@ class ShowGroupStorage extends Component{
         }
     });
 
+    showDeleteOptionForAdmin = ((item, access)=>{
+        if(access==="admin"){
+
+            return(
+                <button className="btn btn-link" onClick={()=>{this.props.handleDeleteData(item)}}>
+                    <img src={Delete} alt="delete" width="15" height="15"/>
+                </button>
+            )
+        }
+        else {
+            return(
+                <span></span>
+            )
+        }
+
+    });
+
     render(){
 
         const {item} = this.props;
@@ -63,9 +80,7 @@ class ShowGroupStorage extends Component{
                     { item.ctime }
                 </td>
                 <td >
-                    <button className="btn btn-link" onClick={()=>{this.props.handleDelete(item)}}>
-                        <img src={Delete} alt="delete" width="15" height="15"/>
-                    </button>
+                    {this.showDeleteOptionForAdmin(item, this.props.access)}
                 </td>
             </tr>
             </tbody>

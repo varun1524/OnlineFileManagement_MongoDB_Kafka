@@ -396,4 +396,133 @@ router.post('/fetchgroupaccessdetails', function(req, res, next){
     }
 });
 
+router.post('/deletegroup', function(req, res, next){
+    try{
+        if(req.session.username!==undefined){
+            let data = req.body;
+            data.username = req.session.username;
+            console.log(data);
+
+
+            kafka.make_request('deletegroup_topic', data, function(err,results){
+                console.log('in result');
+                console.log(results);
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+                else
+                {
+                    if(results.status === 201){
+                        console.log("Received username: "+results.username);
+                        console.log("Local username: "+ req.body.username);
+                        console.log(results.access);
+                        res.status(201).send({"access":results.groupname});
+                    }
+                    else if(results.status === 301){
+                        res.status(301).send({"message":results.message});
+                    }
+                    else if(results.status === 401) {
+                        res.status(401).send({"message":"Failed to add new members in group"});
+                    }
+                }
+            });
+        }
+        else{
+            res.status(203).send({"message":"Session Expired. Please login again."});
+        }
+    }
+    catch (e)
+    {
+        console.log(e);
+        res.status(301).json({message:e});
+    }
+});
+
+router.post('/deletemember', function(req, res, next){
+    try{
+        if(req.session.username!==undefined){
+            let data = req.body;
+            data.username = req.session.username;
+            console.log(data);
+
+
+            kafka.make_request('deletemember_topic', data, function(err,results){
+                console.log('in result');
+                console.log(results);
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+                else
+                {
+                    if(results.status === 201){
+                        console.log("Received username: "+results.username);
+                        console.log("Local username: "+ req.body.username);
+                        console.log(results.access);
+                        res.status(201).send({"message":results.message});
+                    }
+                    else if(results.status === 301){
+                        res.status(301).send({"message":results.message});
+                    }
+                    else if(results.status === 401) {
+                        res.status(401).send({"message":"Failed to add new members in group"});
+                    }
+                }
+            });
+        }
+        else{
+            res.status(203).send({"message":"Session Expired. Please login again."});
+        }
+    }
+    catch (e)
+    {
+        console.log(e);
+        res.status(301).json({message:e});
+    }
+});
+
+router.post('/deletecontent', function(req, res, next){
+    try{
+        if(req.session.username!==undefined){
+            let data = req.body;
+            data.username = req.session.username;
+            console.log(data);
+
+
+            kafka.make_request('deletecontentfromgroup_topic', data, function(err,results){
+                console.log('in result');
+                console.log(results);
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+                else
+                {
+                    if(results.status === 201){
+                        console.log("Received username: "+results.username);
+                        console.log("Local username: "+ req.body.username);
+                        console.log(results.access);
+                        res.status(201).send({"message":results.message});
+                    }
+                    else if(results.status === 301){
+                        res.status(301).send({"message":results.message});
+                    }
+                    else if(results.status === 401) {
+                        res.status(401).send({"message":"Failed to add new members in group"});
+                    }
+                }
+            });
+        }
+        else{
+            res.status(203).send({"message":"Session Expired. Please login again."});
+        }
+    }
+    catch (e)
+    {
+        console.log(e);
+        res.status(301).json({message:e});
+    }
+});
+
 module.exports = router;

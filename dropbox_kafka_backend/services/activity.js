@@ -114,7 +114,7 @@ handle_request = ((data, callback)=>{
                                         jsonObj.push(tempObj);
                                     }
 
-                                    storageactivitycoll.find({username:username}).sort({activitytime:-1}).limit(5).toArray(function (err, results2) {
+                                    storageactivitycoll.find({username:username},{filedata:0}).sort({activitytime:-1}).limit(5).toArray(function (err, results2) {
                                         console.log(results2);
                                         if (err) {
                                             throw err;
@@ -127,7 +127,7 @@ handle_request = ((data, callback)=>{
                                                 tempObj["activitytype"] = results2[i].activitytype;
                                                 tempObj["activitytime"] = results2[i].activitytime;
 
-                                                storagecoll.find({_id:ObjectId(results2[i].itemid)}).toArray(function (err, results3) {
+                                                storagecoll.find({_id:ObjectId(results2[i].itemid)},{filedata:0}).toArray(function (err, results3) {
                                                     console.log(results3);
                                                     if (err) {
                                                         console.log(err);
@@ -138,7 +138,8 @@ handle_request = ((data, callback)=>{
                                                         tempObj["type"] = results3[0].type;
                                                         jsonObj.push(tempObj);
                                                         count++;
-                                                        console.log("i:" + i);
+                                                        console.log("count:" + count);
+                                                        console.log("result 2 length: "+results2.length);
                                                         if (count === results2.length) {
                                                             console.log(i + ":" + results2.length);
                                                             response.status = 201;
@@ -148,7 +149,6 @@ handle_request = ((data, callback)=>{
                                                     }
                                                 });
                                             }
-                                            console.log(jsonObj);
                                         }
                                         else if (results2.length === 0) {
                                             response.status = 201;
@@ -181,4 +181,3 @@ handle_request = ((data, callback)=>{
 
 exports.insertIntoActivity = insertIntoActivity;
 exports.handle_request = handle_request;
-// module.exports = router;

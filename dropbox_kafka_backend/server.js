@@ -222,7 +222,7 @@ try {
 
             console.log(data.replyTo);
 
-            downloadfile.handle(data.data, function (err, res) {
+            downloadfile.handle_request(data.data, function (err, res) {
 
                 console.log('after handle' + res);
                 var payloads = [

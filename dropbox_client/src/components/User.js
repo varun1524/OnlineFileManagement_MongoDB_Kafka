@@ -91,6 +91,46 @@ class User extends Component {
         // }
     });
 
+    handleFileDownload = ((item) => {
+        API.downloadFile({"fileid":item.id}).then((response)=>{
+            console.log(response.status);
+
+            if(response.status===201){
+                response.json().then((data)=> {
+                    console.log(data);
+
+                    var blob = new Blob([data.filedata]);
+
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = data.name;
+                    link.click();
+
+                });
+            }
+            else if(response.status===203){
+                console.log("Session Expired.");
+                this.props.handlePageChange("/");
+            }
+            else if(response.status===301){
+                console.log("Failed to Download File");
+                this.setState({
+                    ...this.state,
+                    message:"Failed Download File"
+                });
+            }
+            // console.log(arrayData);
+
+            // console.log(arrayBuffer);
+            // console.log(arrayBuffer.byteLength);
+
+            // binaryString = String.fromCharCode.apply(null, array);
+            // console.log(binaryString);
+
+
+        });
+    });
+
     componentWillMount(){
         console.log(this.state);
         API.getSession().then((response)=>{
@@ -211,6 +251,7 @@ class User extends Component {
                                                 handlePageChange={this.props.handlePageChange}
                                                 redirectToFile = {this.redirectToFile}
                                                 handleShare = {this.handleShare}
+                                                handleFileDownload = {this.handleFileDownload}
                                             />
                                         </div>
                                     )}/>
@@ -221,6 +262,7 @@ class User extends Component {
                                                 username={this.props.username}
                                                 handlePageChange={this.props.handlePageChange}
                                                 handleShare = {this.handleShare}
+                                                handleFileDownload = {this.handleFileDownload}
                                             />
                                         </div>
                                     )}/>

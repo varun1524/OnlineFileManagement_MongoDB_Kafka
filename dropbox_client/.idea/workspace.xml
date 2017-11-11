@@ -14,18 +14,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="User.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/User.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="31" column="27" lean-forward="false" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ShowGroups.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/ShowGroups.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -38,20 +26,45 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="File.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="User.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/components/User.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="365">
+              <caret line="122" column="0" lean-forward="true" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#721#3021#0" expanded="false" />
+                <element signature="n#!!block;n#componentWillMount#0;n#User#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Home.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Home.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="171" column="48" lean-forward="false" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="File.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/File.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1468">
-              <caret line="109" column="19" lean-forward="false" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
+            <state relative-caret-position="241">
+              <caret line="455" column="16" lean-forward="false" selection-start-line="455" selection-start-column="16" selection-end-line="456" selection-end-column="52" />
               <folding>
+                <element signature="e#0#39#0" expanded="true" />
                 <element signature="e#779#1611#0" expanded="false" />
                 <element signature="e#1646#2767#0" expanded="false" />
+                <element signature="e#2862#7843#0" expanded="false" />
                 <element signature="e#7851#9739#0" expanded="false" />
                 <element signature="e#9767#11172#0" expanded="false" />
                 <element signature="n#!!block;n#redirectParentDirectory#0;n#File#0" expanded="false" />
                 <element signature="e#12119#14014#0" expanded="false" />
-                <element signature="e#14062#17749#0" expanded="false" />
-                <element signature="e#17781#18050#0" expanded="false" />
+                <element signature="e#16745#17014#0" expanded="false" />
                 <element signature="n#!!block;n#componentWillMount#0;n#File#0" expanded="false" />
                 <element signature="n#!!block;n#componentWillUpdate#0;n#File#0" expanded="false" />
               </folding>
@@ -199,19 +212,19 @@
         <option value="$PROJECT_DIR$/src/components/SharedByMe.js" />
         <option value="$PROJECT_DIR$/src/components/MainPage.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/src/components/Home.js" />
         <option value="$PROJECT_DIR$/src/components/EditProfile.js" />
         <option value="$PROJECT_DIR$/src/components/Profile.js" />
-        <option value="$PROJECT_DIR$/src/components/File.js" />
         <option value="$PROJECT_DIR$/src/components/Activity.js" />
         <option value="$PROJECT_DIR$/src/components/GroupsInfo.js" />
-        <option value="$PROJECT_DIR$/src/components/User.js" />
         <option value="$PROJECT_DIR$/src/components/ShowGroups.js" />
         <option value="$PROJECT_DIR$/src/api/API.js" />
         <option value="$PROJECT_DIR$/src/components/ShowGroupMembers.js" />
         <option value="$PROJECT_DIR$/src/components/ShowGroupStorage.js" />
         <option value="$PROJECT_DIR$/src/components/GroupDetails.js" />
         <option value="$PROJECT_DIR$/src/components/Group.js" />
+        <option value="$PROJECT_DIR$/src/components/File.js" />
+        <option value="$PROJECT_DIR$/src/components/Home.js" />
+        <option value="$PROJECT_DIR$/src/components/User.js" />
       </list>
     </option>
   </component>
@@ -383,12 +396,12 @@
       <workItem from="1510026342010" duration="26756000" />
       <workItem from="1510196970950" duration="671000" />
       <workItem from="1510224737647" duration="8410000" />
-      <workItem from="1510378382427" duration="1473000" />
+      <workItem from="1510378382427" duration="2657000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="361090000" />
+    <option name="totallyTimeSpent" value="362274000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -580,13 +593,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="284" column="46" lean-forward="true" selection-start-line="284" selection-start-column="46" selection-end-line="284" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/EditProfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-129">
@@ -660,16 +666,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/User.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="31" column="27" lean-forward="false" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/ShowGroups.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -737,21 +733,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="171" column="48" lean-forward="false" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/File.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1468">
-          <caret line="109" column="19" lean-forward="false" selection-start-line="109" selection-start-column="19" selection-end-line="109" selection-end-column="19" />
+        <state relative-caret-position="241">
+          <caret line="455" column="16" lean-forward="false" selection-start-line="455" selection-start-column="16" selection-end-line="456" selection-end-column="52" />
           <folding>
+            <element signature="e#0#39#0" expanded="true" />
             <element signature="e#779#1611#0" expanded="false" />
             <element signature="e#1646#2767#0" expanded="false" />
+            <element signature="e#2862#7843#0" expanded="false" />
             <element signature="e#7851#9739#0" expanded="false" />
             <element signature="e#9767#11172#0" expanded="false" />
             <element signature="n#!!block;n#redirectParentDirectory#0;n#File#0" expanded="false" />
             <element signature="e#12119#14014#0" expanded="false" />
-            <element signature="e#14062#17749#0" expanded="false" />
-            <element signature="e#17781#18050#0" expanded="false" />
+            <element signature="e#16745#17014#0" expanded="false" />
             <element signature="n#!!block;n#componentWillMount#0;n#File#0" expanded="false" />
             <element signature="n#!!block;n#componentWillUpdate#0;n#File#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/User.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="122" column="0" lean-forward="true" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#721#3021#0" expanded="false" />
+            <element signature="n#!!block;n#componentWillMount#0;n#User#0" expanded="false" />
           </folding>
         </state>
       </provider>

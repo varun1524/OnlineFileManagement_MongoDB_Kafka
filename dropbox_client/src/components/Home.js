@@ -167,6 +167,10 @@ class Home extends Component {
                 }
             });
         }
+        else {
+            console.log("You selected file");
+            this.props.handleFileDownload(item);
+        }
 
         // this.setState((state) => {
         //     let path={

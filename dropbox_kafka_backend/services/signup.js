@@ -1,8 +1,8 @@
 var act = require('./activity');
 var bcrypt = require('bcrypt');
 var UserProfile = require('../models/userprofile');
-var User = require('../models/user');
-
+let mongo = require('./mongo');
+let mongoURL = "mongodb://localhost:27017/dropbox";
 
 handle_request = ((data, callback) => {
     let err=null;
@@ -11,100 +11,111 @@ handle_request = ((data, callback) => {
         console.log(data);
         var salt = bcrypt.genSaltSync(10);
 
-        let user = new User({
+        let user = {
             _id  : data.username,
             firstname : data.firstname,
             lastname : data.lastname,
             username : data.username,
             hashpassword : bcrypt.hashSync(data.password, salt)
-        });
+        };
 
         console.log(user);
 
-        // mongo.connect(mongoURL, function () {
-        // var usercollection = mongo.collection('users');
-        User.find({username:data.username}, function(err, result) {
-            console.log(result);
-            if(err){
-                console.log("error:");
-                console.log(err);
-                throw err;
-            }
-            if(result.length>0) {
-                console.log("User Exists");
-                console.log(result[0]._id);
-                response.status = 301;
-                response.message = "Already Exist";
-                callback(err,response);
-            }
-            else {
-                user.save(function (err, result1) {
-                    console.log("result");
-                    console.log(result1);
+        mongo.connect(mongoURL, function () {
+            let usercollection = mongo.collection('users');
+            usercollection.find({username: data.username}, function (err, result) {
+                console.log(result);
+                if (err) {
+                    console.log("error:");
+                    console.log(err);
+                    throw err;
+                }
+                if (result.length > 0) {
+                    console.log("User Exists");
+                    console.log(result[0]._id);
+                    response.status = 301;
+                    response.message = "Already Exist";
+                    callback(err, response);
+                }
+                else {
+                    usercollection.insertOne(user, function (err, result1) {
+                        console.log("result");
+                        console.log(result1);
 
-                    if(err){
-                        console.log(err);
-                        throw err;
-                    }
+                        if (err) {
+                            console.log(err);
+                            throw err;
+                        }
 
-                    if (result1 !== null && result1 !== undefined) {
-                        console.log("Sign up successful");
-                        // let userprofilecollection = mongo.collection("userprofile");
+                        if (result1.insertedCount===1) {
+                            console.log("Sign up successful");
+                            let userprofilecollection = mongo.collection("userprofiles");
 
-                        let userprofile = new UserProfile({
-                            _id  : data.username,
-                            overview : "",
-                            work: "",
-                            education: "",
-                            contactinfo: "",
-                            lifeevents: "",
-                            music: false,
-                            sports: false,
-                            reading: false,
-                        });
-                        userprofile.save(function (err, result2) {
-                            console.log(result2);
-                            if(err){
-                                console.log(err);
-                                throw "Error while adding data into userprofile table";
-                            }
-                            act.insertIntoActivity(function (err, activityInserted) {
-                                if(err){
+                            let userprofile = {
+                                _id: data.username,
+                                overview: "",
+                                work: "",
+                                education: "",
+                                contactinfo: "",
+                                lifeevents: "",
+                                music: false,
+                                sports: false,
+                                reading: false,
+                            };
+
+                            userprofilecollection.insertOne(userprofile, function (err, result2) {
+                                console.log(result2);
+                                if (err) {
                                     console.log(err);
-                                    response.status = 301;
-                                    response.message = "Signup Successful. Failed to add user activity";
-                                    callback(err,response);
+                                    throw "Error while adding data into userprofile table";
                                 }
-                                console.log(activityInserted);
-                                if(activityInserted){
-                                    response.status = 201;
-                                    response.username=data.username;
-                                    response.message = "Signup Successful";
-                                    callback(err,response);
+                                if(result2.insertedCount===1){
+                                    act.insertIntoActivity(function (err, activityInserted) {
+                                        if (err) {
+                                            console.log(err);
+                                            response.status = 301;
+                                            response.message = "Signup Successful. Failed to add user activity";
+                                            callback(err, response);
+                                        }
+                                        console.log(activityInserted);
+                                        if (activityInserted) {
+                                            response.status = 201;
+                                            response.username = data.username;
+                                            response.message = "Signup Successful";
+                                            callback(err, response);
+                                        }
+                                        else {
+                                            usercollection.deleteOne({_id: data.username}, function (err, result3) {
+                                                console.log(result3);
+                                                userprofilecollection.deleteOne({_id: data.username}, function (err, result4) {
+                                                    console.log(result4);
+                                                    //delete directory here
+                                                    response.status = 401;
+                                                    response.message = "Signup Failed";
+                                                    callback(err, response);
+                                                })
+                                            })
+
+                                        }
+                                    }, data.username, "signup");
                                 }
                                 else {
-                                    User.deleteOne({_id: data.username},function (err, result3) {
-                                        console.log(result3);
-                                        userprofile.deleteOne({_id:data.username}, function (err, result4) {
-                                            console.log(result4);
-                                            //delete directory here
-                                            response.status = 401;
-                                            response.message = "Signup Failed";
-                                            callback(err,response);
-                                        })
+                                    usercollection.deleteOne({_id: data.username}, function (err, result3) {
+                                        response.status = 401;
+                                        response.message = "Signup Failed";
+                                        callback(err, response);
                                     })
-
                                 }
-                            },data.username, "signup");
-                        });
-                    }
-                    else {
-                        response.status = 401;
-                        response.message = "Signup Failed";
-                        callback(err,response);
-                    }
-                });
-            }
+                            });
+                        }
+                        else {
+                            response.status = 401;
+                            response.message = "Signup Failed";
+                            callback(err, response);
+                        }
+                    });
+                }
+            });
         });
     }
     catch (e){

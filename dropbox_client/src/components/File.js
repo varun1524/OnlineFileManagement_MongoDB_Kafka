@@ -453,39 +453,8 @@ class File extends Component {
                 });
             }
             else if(item.type==="f"){
-                API.downloadFile({"fileid":item.id}).then((response)=>{
-                    console.log(response.status);
-
-                    if(response.status===201){
-                        response.json().then((data)=> {
-                            console.log(data);
-
-                            var blob = new Blob([data.filedata]);
-
-                            var link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(blob);
-                            link.download = data.name;
-                            link.click();
-
-                        });
-                    }
-                    else if(response.status===203){
-
-                    }
-                    else if(response.status===301){
-
-                    }
-                    // console.log(arrayData);
-
-                    // console.log(arrayBuffer);
-                    // console.log(arrayBuffer.byteLength);
-
-                    // binaryString = String.fromCharCode.apply(null, array);
-                    // console.log(binaryString);
-
-
-                });
                 console.log("You selected file");
+                this.props.handleFileDownload(item);
             }
             console.log(state);
         });

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import * as API from '../api/API';
-import Delete from "../images/Delete.png";
-import {Route,Switch,Link} from 'react-router-dom';
+import {Route,Switch} from 'react-router-dom';
 import GroupDetails from "./GroupDetails";
 import ShowGroups from "./ShowGroups";
 

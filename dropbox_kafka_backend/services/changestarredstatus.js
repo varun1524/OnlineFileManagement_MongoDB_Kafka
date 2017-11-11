@@ -4,7 +4,7 @@ let mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;
 
 
-handle4=((data, callback) => {
+handle_request=((data, callback) => {
     let response = {};
     try {
         if(data.username!==undefined && data.username!==null && data.username!=="") {
@@ -71,5 +71,5 @@ handle4=((data, callback) => {
     }
 });
 
-exports.handle4 = handle4;
+exports.handle_request = handle_request;
 

@@ -28,20 +28,20 @@ handle_request = ((data, callback) => {
                             throw err;
                         }
                         if(result.insertedCount===1){
-                            act.insertIntoActivity(function (err, isactivityinserted) {
-                                if(isactivityinserted) {
+                            /*act.insertIntoActivity(function (err, isactivityinserted) {
+                                if(isactivityinserted) {*/
                                         response.status=201;
                                         response.data = result;
                                         response.message = "Group Created Successfully";
                                         callback(null, response);
-                                }
-                                else {
+                                // }
+                                /*else {
                                     response.status = data.username;
                                     response.status = 301;
                                     response.message = "Group created. But failed to add as an activity";
                                     callback(null, response);
                                 }
-                            }, username ,"group", result.insertedId ,result.creationtime);
+                            }, username ,"group", result.insertedId ,result.creationtime);*/
                         }
                         else {
                             response.status=301;

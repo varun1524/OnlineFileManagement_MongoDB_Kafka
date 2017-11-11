@@ -1,5 +1,3 @@
-let fs = require('fs');
-let shell = require('shelljs');
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;

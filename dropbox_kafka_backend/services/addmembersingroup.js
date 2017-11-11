@@ -1,12 +1,6 @@
-let act = require('./activity');
-let fs = require('fs');
-let shell = require('shelljs');
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;
-// let fse = require('fs-extra');
-let filePath="";
-let storage = require('./storage');
 
 handle_request = ((data, callback) => {
     let response = {};

@@ -1,7 +1,7 @@
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 
-handle2 = ((data, callback) =>{
+handle_request = ((data, callback) =>{
     let res = {};
     try {
         console.log(data.username);
@@ -71,4 +71,4 @@ handle2 = ((data, callback) =>{
     }
 });
 
-exports.handle2 = handle2;
+exports.handle_request = handle_request;

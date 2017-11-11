@@ -2,7 +2,7 @@ let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
 let ObjectId = require('mongodb').ObjectID;
 
-handle = ((data, callback)=>{
+handle_request = ((data, callback)=>{
     let response = {};
     try {
 
@@ -54,4 +54,4 @@ handle = ((data, callback)=>{
     }
 });
 
-exports.handle = handle;
+exports.handle_request = handle_request;

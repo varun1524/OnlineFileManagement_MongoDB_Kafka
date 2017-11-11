@@ -1,4 +1,3 @@
-let fs = require('fs');
 let shell = require('shelljs');
 let mongo = require("./mongo");
 let mongoURL = "mongodb://localhost:27017/dropbox";
@@ -50,37 +49,21 @@ handle_request = ((data, callback) => {
                                                     throw err;
                                                 }
                                                 if (results2.result.n >= 0) {
-                                                    deleteFromFileSystem(function (err, deleteResult) {
-                                                        if (deleteResult) {
-                                                            response.status=201;
-                                                            response.message="Deleted Successfully";
-                                                            callback(null, response);
-                                                        }
-                                                        else {
-                                                            response.status=301;
-                                                            response.message="Delete Unsuccessful";
-                                                            callback(null, response);
-                                                        }
-                                                    }, results[0].name, results[0].path);
+                                                    response.status=201;
+                                                    response.message="Deleted Successfully";
+                                                    callback(null, response);
                                                 }
                                                 else {
-                                                    console.log("Failed to Remove");
+                                                    response.status=301;
+                                                    response.message="Delete Unsuccessful";
+                                                    callback(null, response);
                                                 }
                                             });
                                     }
                                     else if(results[0].type==="f"){
-                                        deleteFromFileSystem(function (err, deleteResult) {
-                                            if (deleteResult) {
-                                                response.status=201;
-                                                response.message="Deleted Successfully";
-                                                callback(null, response);
-                                            }
-                                            else {
-                                                response.status=301;
-                                                response.message="Delete Unsuccessfully";
-                                                callback(null, response);
-                                            }
-                                        }, results[0].name, results[0].path);
+                                        response.status=201;
+                                        response.message="Deleted Successfully";
+                                        callback(null, response);
                                     }
                                 }
                                 else {
@@ -105,7 +88,7 @@ handle_request = ((data, callback) => {
     }
 });
 
-deleteFromFileSystem = ((callback, name, path) => {
+/*deleteFromFileSystem = ((callback, name, path) => {
     let deleteResult=false;
     let err=null;
     try{
@@ -127,6 +110,6 @@ deleteFromFileSystem = ((callback, name, path) => {
     finally {
         callback(err, deleteResult);
     }
-});
+});*/
 
 exports.handle_request = handle_request;

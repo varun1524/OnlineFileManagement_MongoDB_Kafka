@@ -1,7 +1,5 @@
-var fs = require('fs');
 var act = require('./activity');
 var bcrypt = require('bcrypt');
-
 var UserProfile = require('../models/userprofile');
 var User = require('../models/user');
 
@@ -79,7 +77,6 @@ handle_request = ((data, callback) => {
                                 }
                                 console.log(activityInserted);
                                 if(activityInserted){
-                                    createUserDirectory(data.username);
                                     response.status = 201;
                                     response.username=data.username;
                                     response.message = "Signup Successful";
@@ -116,23 +113,6 @@ handle_request = ((data, callback) => {
         response.status = 401;
         response.message = "Signup Failed";
         callback(err,response);
-    }
-});
-
-createUserDirectory = ((user) => {
-    try {
-        if(fs.existsSync('./dropboxstorage')){
-            var userdirpath="./dropboxstorage/" + user;
-            console.log(userdirpath);
-            var userPath = fs.mkdir(userdirpath);
-            console.log(userPath);
-        }
-        else{
-            console.log("dropboxstorage does not exist");
-        }
-    }
-    catch(e) {
-        throw e;
     }
 });
 

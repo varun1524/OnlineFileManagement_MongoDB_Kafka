@@ -70,7 +70,7 @@ try {
 
             console.log(data.replyTo);
 
-            uploadFiles.handle1(data.data, function (err, res) {
+            uploadFiles.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {
@@ -162,7 +162,7 @@ try {
 
             console.log(data.replyTo);
 
-            createdir.handle5(data.data, function (err, res) {
+            createdir.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {
@@ -192,7 +192,7 @@ try {
 
             console.log(data.replyTo);
 
-            retrieveDirData.handle3(data.data, function (err, res) {
+            retrieveDirData.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {
@@ -254,7 +254,7 @@ try {
             var data = JSON.parse(message.value);
 
             console.log(data.replyTo);
-            starred.handle4(data.data, function (err, res) {
+            starred.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {
@@ -284,7 +284,7 @@ try {
         console.log(data.replyTo);
 
         if (message.topic === "retrievestarreddata_topic") {
-            retrieveStarredData.handle2(data.data, function (err, res) {
+            retrieveStarredData.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {

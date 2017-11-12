@@ -26,6 +26,7 @@ let getusergroupaccess = require('./services/fetchusergroupaccess');
 let deletegroup = require('./services/deletegroup');
 let deletemember = require('./services/deletememberfromgroup');
 let deletecontentfromgroup = require('./services/deletecontentfromgroup');
+let jmetertest = require('./services/jmetertest');
 
 // var consumer = connection.getConsumer();
 let loginConsumer = connection.getConsumerObj("login_topic");
@@ -55,6 +56,9 @@ let getusergroupaccessConsumer = connection.getConsumerObj("fetchusergroupaccess
 let deletegroupConsumer = connection.getConsumerObj("deletegroup_topic");
 let deletememberConsumer = connection.getConsumerObj("deletemember_topic");
 let deletecontentfromgroupConsumer = connection.getConsumerObj("deletecontentfromgroup_topic");
+let jmetertestConsumer = connection.getConsumerObj("jmetertest_topic");
+
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic jmetertest_topic
 
 
 let producer = connection.getProducer();
@@ -823,6 +827,34 @@ try {
         console.log(data.replyTo);
         if (message.topic === "deletecontentfromgroup_topic") {
             deletecontentfromgroup.handle_request(data.data, function (err, res) {
+                console.log('after handle' + res);
+                var payloads = [
+                    {
+                        topic: data.replyTo,
+                        messages: JSON.stringify({
+                            correlationId: data.correlationId,
+                            data: res
+                        }),
+                        partition: 0
+                    }
+                ];
+                producer.send(payloads, function (err, data) {
+                    console.log(payloads);
+                });
+            });
+        }
+    });
+
+    jmetertestConsumer.on('message', function (message) {
+        console.log('message received');
+        console.log(message);
+        console.log(message.value);
+        console.log(JSON.stringify(message.value));
+        var data = JSON.parse(message.value);
+
+        console.log(data.replyTo);
+        if (message.topic === "jmetertest_topic") {
+            jmetertest.handle_request(data.data, function (err, res) {
                 console.log('after handle' + res);
                 var payloads = [
                     {

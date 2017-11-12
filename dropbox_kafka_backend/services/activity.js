@@ -107,12 +107,10 @@ handle_request = ((data, callback)=>{
                             else
                             {
                                 if(results1.length>0) {
-                                    for (i = 0; i < results1.length; i++) {
-                                        let tempObj = {};
-                                        tempObj["activitytype"] = results1[i].activitytype;
-                                        tempObj["activitytime"] = results1[i].activitytime;
-                                        jsonObj.push(tempObj);
-                                    }
+                                    let tempObj = {};
+                                    tempObj["activitytype"] = results1[0].activitytype;
+                                    tempObj["activitytime"] = results1[0].activitytime;
+                                    jsonObj.push(tempObj);
 
                                     storageactivitycoll.find({username:username},{filedata:0}).sort({activitytime:-1}).limit(5).toArray(function (err, results2) {
                                         console.log(results2);

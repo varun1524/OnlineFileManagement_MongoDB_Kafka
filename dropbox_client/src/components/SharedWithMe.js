@@ -39,9 +39,6 @@ class ShowData extends Component{
                 <td>
                     { item.ctime }
                 </td>
-                <td>
-                    { item.size }
-                </td>
             </tr>
             </tbody>
         );

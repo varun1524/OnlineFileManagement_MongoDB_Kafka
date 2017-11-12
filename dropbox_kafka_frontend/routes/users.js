@@ -6,9 +6,8 @@ var kafka = require('./kafka/client');
 router.post('/getDirData', function (req, res, next) {
     try {
         console.log(req.session.username);
-        if(req.session.username!==null || req.session.username!==undefined) {
-            req.body.username = req.session.username;
-            req.body.service = "getDirData";
+        // if(req.session.username!==null || req.session.username!==undefined) {
+        //     req.body.username = req.session.username;
             console.log(req.body);
             kafka.make_request('retrievedirectory_topic',req.body, function(err,results){
                 console.log('in result');
@@ -35,10 +34,10 @@ router.post('/getDirData', function (req, res, next) {
                     }
                 }
             });
-        }
-        else{
-            res.status(203).send({"message":"Session Expired. Please Login Again"});
-        }
+        // }
+        // else{
+        //     res.status(203).send({"message":"Session Expired. Please Login Again"});
+        // }
     }
     catch (e){
         console.log(e);
@@ -127,11 +126,11 @@ router.post('/createDir', function(req, res, next){
 
 router.post('/changestarredstatus', function (req, res, next) {
     try {
-        if(req.session.username!==undefined && req.session.username!==null) {
-
-            console.log(req.body);
+        // if(req.session.username!==undefined && req.session.username!==null) {
+        //
+        //     console.log(req.body);
             let data = req.body;
-            data.username = req.session.username;
+            // data.username = req.session.username;
 
             kafka.make_request('changestarredstatus_topic', data, function(err,results){
                 console.log('in result');
@@ -158,10 +157,10 @@ router.post('/changestarredstatus', function (req, res, next) {
                     }
                 }
             });
-        }
-        else {
-            res.status(203).json({"message": "Session Expired. Login again"})
-        }
+        // }
+        // else {
+        //     res.status(203).json({"message": "Session Expired. Login again"})
+        // }
     }
     catch (e){
         console.log(e);
@@ -173,11 +172,11 @@ router.post('/getStarredData', function (req, res, next) {
     try {
         console.log(req.session.username);
         try {
-            if(req.session.username!==undefined && req.session.username!==null) {
-
-                console.log(req.body);
+            // if(req.session.username!==undefined && req.session.username!==null) {
+            //
+            //     console.log(req.body);
                 let data = req.body;
-                data.username = req.session.username;
+                // data.username = req.session.username;
 
                 kafka.make_request('retrievestarreddata_topic', data, function(err,results){
                     console.log('in result');
@@ -204,10 +203,10 @@ router.post('/getStarredData', function (req, res, next) {
                         }
                     }
                 });
-            }
-            else {
-                res.status(203).json({"message": "Session Expired. Login again"})
-            }
+            // }
+            // else {
+            //     res.status(203).json({"message": "Session Expired. Login again"})
+            // }
         }
         catch (e){
             console.log(e);
@@ -316,11 +315,11 @@ router.post('/getDataSharedByUser', function (req, res, next) {
 router.post('/fetchDataSharedWithUser', function (req, res, next) {
     try {
         console.log(req.session.username);
-        if(req.session.username!==undefined && req.session.username!==null) {
+        // if(req.session.username!==undefined && req.session.username!==null) {
 
             console.log(req.body);
             let data = req.body;
-            data.username = req.session.username;
+            // data.username = req.session.username;
 
             kafka.make_request('sharedwithuser_topic', data, function(err,results){
                 console.log('in result');
@@ -349,10 +348,10 @@ router.post('/fetchDataSharedWithUser', function (req, res, next) {
                     }
                 }
             });
-        }
-        else {
-            res.status(203).json({"message": "Session Expired. Login again"})
-        }
+        // }
+        // else {
+        //     res.status(203).json({"message": "Session Expired. Login again"})
+        // }
     }
     catch (e){
         console.log(e);
@@ -582,9 +581,9 @@ router.post('/downloadfile', function (req, res, next) {
 
 router.post('/getActivityData', function (req, res, next) {
     try {
-        if(req.session.username!==undefined) {
+        // if(req.session.username!==undefined) {
             let data = req.body;
-            data.username = req.session.username;
+            // data.username = req.session.username;
             console.log(data);
 
             kafka.make_request('activity_topic', data, function(err,results){
@@ -612,10 +611,10 @@ router.post('/getActivityData', function (req, res, next) {
                     }
                 }
             });
-        }
-        else {
-            res.status(203).send({"message":"Session Expired. Login Again"});
-        }
+        // }
+        // else {
+        //     res.status(203).send({"message":"Session Expired. Login Again"});
+        // }
     }
     catch (e){
         console.log(e);
@@ -753,64 +752,6 @@ router.post('/deleteContent', function (req, res, next) {
         console.log(e);
         res.status(301).send({"message" : e});
     }
-});
-
-function doesExist (callback, name, path){
-    try {
-        /*mongo.connect(mongoURL,function () {
-            let exists=true;
-            let storagecoll = mongo.collection("dropboxstorage");
-            storagecoll.find({$and:[{name:name}, {path:path}]}).toArray(function (err, results) {
-                console.log(results);
-                if (err) {
-                    console.log("Fetched Records: " + results.length);
-                }
-                if(results.length===0) {
-                    console.log("Count: " + results.length);
-                    exists=false;
-                }
-                callback(err, exists);
-            });
-        });*/
-    }
-    catch (err){
-        console.log(err);
-    }
-}
-
-deleteIfNotAvailableInStore = ((filename, dirpath) => {});
-
-deleteFromDatabase = ((name, path) => {
-    try{
-        console.log("Delete here: "+name+"   "+path);
-    }
-    catch(e) {
-        throw e;
-    }
-});
-
-deleteFromFileSystem = ((callback, name, path) => {
-    /*let deleteResult=false;
-    let err=null;
-    try{
-        // console.log("Delete here: "+name+"   "+path);
-        console.log(path+name);
-        // if(exist){
-        shell.rm("-r",path+name);
-        if(!fs.existsSync(path+name)){
-            console.log("Deletion Done");
-            deleteResult=true;
-        }
-        // }
-    }
-    catch(e) {
-        err=e;
-        console.log(e);
-        throw e;
-    }
-    finally {
-        callback(err, deleteResult);
-    }*/
 });
 
 module.exports = router;

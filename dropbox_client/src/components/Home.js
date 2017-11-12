@@ -457,11 +457,8 @@ class Home extends Component {
                                     <thead>
                                     <tr className="h3">Starred</tr>
                                     <tr>
-                                        <th>name</th>
-                                        {/*<th>type</th>*/}
-                                        {/*<th>ctime</th>*/}
-                                        <th>mtime</th>
-                                        <th>size</th>
+                                        <th>Name</th>
+                                        <th>Creation time</th>
                                     </tr>
                                     </thead>
                                     {/*<tr>*/}
@@ -491,11 +488,8 @@ class Home extends Component {
                                     <thead>
                                     <tr className="h3">Shared by Me</tr>
                                     <tr>
-                                        <th>name</th>
-                                        {/*<th>type</th>*/}
-                                        {/*<th>ctime</th>*/}
-                                        <th>mtime</th>
-                                        <th>size</th>
+                                        <th>Name</th>
+                                        <th>Creation time</th>
                                     </tr>
                                     {/*<tr>*/}
                                     {/*<td className="text-justify">*/}
@@ -525,11 +519,8 @@ class Home extends Component {
                                     <thead>
                                     <tr className="h3">Shared With Me</tr>
                                     <tr>
-                                        <th>name</th>
-                                        {/*<th>type</th>*/}
-                                        {/*<th>ctime</th>*/}
-                                        <th>mtime</th>
-                                        <th>size</th>
+                                        <th>Name</th>
+                                        <th>Creation time</th>
                                     </tr>
                                     </thead>
                                     <tr>
@@ -561,16 +552,6 @@ class Home extends Component {
                                     {this.state.message}
                                 </div>
                             )}
-                        </div>
-                        <div className="row">
-                            {/*<Modal isOpen={this.state.modalIsOpen} onCancel={this.toggleModal} backdropClosesModal>*/}
-                            {/*<ModalHeader text="Lots of text to show scroll behavior" showCloseButton onClose={this.toggleModal} />*/}
-                            {/*<ModalBody>[...]</ModalBody>*/}
-                            {/*<ModalFooter>*/}
-                            {/*<Button type="primary" onClick={this.toggleModal}>Close modal</Button>*/}
-                            {/*<Button type="link-cancel" onClick={this.toggleModal}>Also closes modal</Button>*/}
-                            {/*</ModalFooter>*/}
-                            {/*</Modal>*/}
                         </div>
                     </div>
                 </div>

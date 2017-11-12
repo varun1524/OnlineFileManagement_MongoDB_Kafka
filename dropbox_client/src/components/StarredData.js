@@ -55,9 +55,6 @@ class StarredData extends Component{
                 <td>
                     { item.ctime.replace("T"," ").replace("Z","")}
                 </td>
-                <td>
-                    { item.size }
-                </td>
                 <td >
                     {/*<button className="btn btn-link" onClick={()=>{this.props.handleDelete(item)}}>*/}
                     {/*<img src={Delete} alt="delete" width="15" height="15"/>*/}

@@ -58,8 +58,6 @@ let deletememberConsumer = connection.getConsumerObj("deletemember_topic");
 let deletecontentfromgroupConsumer = connection.getConsumerObj("deletecontentfromgroup_topic");
 let jmetertestConsumer = connection.getConsumerObj("jmetertest_topic");
 
-bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic jmetertest_topic
-
 
 let producer = connection.getProducer();
 

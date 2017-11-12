@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -19,6 +20,7 @@
     "cors": "^2.8.4",
     "passport-local":"^1.0.0",
     "kafka-node":"^2.2.3",
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "mocha": "^4.0.1"
   }
 }

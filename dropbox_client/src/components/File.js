@@ -530,11 +530,8 @@ class File extends Component {
                                 <table className="table table-responsive text-justify ">
                                     <thead>
                                     <tr>
-                                        <th>name</th>
-                                        {/*<th>type</th>*/}
-                                        {/*<th>ctime</th>*/}
-                                        <th>mtime</th>
-                                        <th>size</th>
+                                        <th>Name</th>
+                                        <th>Creation time</th>
                                     </tr>
                                     </thead>
                                     <tr>

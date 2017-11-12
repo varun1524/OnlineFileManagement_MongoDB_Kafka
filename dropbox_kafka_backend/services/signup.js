@@ -23,16 +23,16 @@ handle_request = ((data, callback) => {
 
         mongo.connect(mongoURL, function () {
             let usercollection = mongo.collection('users');
-            usercollection.find({username: data.username}, function (err, result) {
+            usercollection.findOne({username: data.username}, function (err, result) {
                 console.log(result);
                 if (err) {
                     console.log("error:");
                     console.log(err);
                     throw err;
                 }
-                if (result.length > 0) {
+                if (result) {
                     console.log("User Exists");
-                    console.log(result[0]._id);
+                    console.log(result._id);
                     response.status = 301;
                     response.message = "Already Exist";
                     callback(err, response);

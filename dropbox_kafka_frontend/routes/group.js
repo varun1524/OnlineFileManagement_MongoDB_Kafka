@@ -4,9 +4,9 @@ let kafka = require('./kafka/client');
 
 router.post('/creategroup', function(req, res, next){
     try{
-        if(req.session.username!==undefined){
+        // if(req.session.username!==undefined){
             let data = req.body;
-            data.username = req.session.username;
+            // data.username = req.session.username;
             console.log(data);
             kafka.make_request('creategroup_topic',data, function(err,results){
                 console.log('in result');
@@ -30,10 +30,10 @@ router.post('/creategroup', function(req, res, next){
                     }
                 }
             });
-        }
-        else{
-            res.status(203).send({"message":"Session Expired. Please login again."});
-        }
+        // }
+        // else{
+        //     res.status(203).send({"message":"Session Expired. Please login again."});
+        // }
     }
     catch (e)
     {
@@ -44,9 +44,9 @@ router.post('/creategroup', function(req, res, next){
 
 router.post('/getgroups', function(req, res, next){
     try{
-        if(req.session.username!==undefined){
+        // if(req.session.username!==undefined){
             let data = req.body;
-            data.username = req.session.username;
+            // data.username = req.session.username;
             console.log(data);
             kafka.make_request('fetchgroups_topic',data, function(err,results){
                 console.log('in result');
@@ -70,10 +70,10 @@ router.post('/getgroups', function(req, res, next){
                     }
                 }
             });
-        }
-        else{
-            res.status(203).send({"message":"Session Expired. Please login again."});
-        }
+        // }
+        // else{
+        //     res.status(203).send({"message":"Session Expired. Please login again."});
+        // }
     }
     catch (e)
     {

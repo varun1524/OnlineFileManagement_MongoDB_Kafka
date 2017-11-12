@@ -44,9 +44,6 @@ class SharedByMe extends Component{
                 <td>
                     { item.ctime }
                 </td>
-                <td>
-                    { item.size }
-                </td>
                 <td >
                     {/*<button className="btn btn-link" onClick={()=>{this.props.handleDelete(item)}}>*/}
                         {/*<img src={Delete} alt="delete" width="15" height="15"/>*/}

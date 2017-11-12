@@ -1,6 +1,6 @@
 express = require('express');
-var kafka = require('./kafka/client');
-var router = express.Router();
+let kafka = require('./kafka/client');
+let router = express.Router();
 
 /* GET Sign Up Page. */
 router.get('/', function(req, res, next) {

@@ -1,13 +1,12 @@
 let express = require('express');
 let router = express.Router();
-/*Busboy = require('busboy');*/
-var kafka = require('./kafka/client');
+let kafka = require('./kafka/client');
 
 router.post('/getDirData', function (req, res, next) {
     try {
         console.log(req.session.username);
-        // if(req.session.username!==null || req.session.username!==undefined) {
-        //     req.body.username = req.session.username;
+        if(req.session.username!==null || req.session.username!==undefined) {
+            req.body.username = req.session.username;
             console.log(req.body);
             kafka.make_request('retrievedirectory_topic',req.body, function(err,results){
                 console.log('in result');
@@ -34,10 +33,10 @@ router.post('/getDirData', function (req, res, next) {
                     }
                 }
             });
-        // }
-        // else{
-        //     res.status(203).send({"message":"Session Expired. Please Login Again"});
-        // }
+        }
+        else{
+            res.status(203).send({"message":"Session Expired. Please Login Again"});
+        }
     }
     catch (e){
         console.log(e);
@@ -73,45 +72,6 @@ router.post('/createDir', function(req, res, next){
                     }
                 }
             });
-            /*console.log("in create directory");
-            console.log(req.session.username);
-            console.log(req.body.directoryName);
-            let receivedPath = req.body.dirpath;
-            let receivedName = req.body.directoryName;
-            let username = req.session.username;
-            let userDirpath = "./dropboxstorage/"+username+"/"+receivedPath;
-            if(fs.existsSync(userDirpath)){
-                let createDirpath = userDirpath + receivedName;
-                console.log("Create Directory Path: "+createDirpath);
-                console.log("Parent Directory Path: "+userDirpath);
-                if(!fs.existsSync(createDirpath)) {
-                    insertIntoStorage(function (err, result) {
-                        if(err){
-                            res.status(301).send({message: "Error while adding directory data into database"});
-                        }
-                        if(result){
-                            fs.mkdir(createDirpath, null, function (err) {
-                                console.log(err);
-                                if (err) {
-                                    throw ("failed to create directory" + err);
-                                }
-                                console.log("Directory Created Successfully");
-                                res.status(201).send({message: "Directory Created Successfully"});
-                            });
-                        }
-                        else {
-                            res.status(301).send({message: "Error while adding directory data into database"});
-                        }
-                    },req.body.directoryName, userDirpath, "d", username);
-
-                }
-                else {
-                    res.status(301).send({message: "Directory already exists"});
-                }
-            }
-            else{
-                throw "Error while creating directory";
-            }*/
         }
         else{
             res.status(203).send({"message":"Session Expired. Please login again."});
@@ -126,11 +86,11 @@ router.post('/createDir', function(req, res, next){
 
 router.post('/changestarredstatus', function (req, res, next) {
     try {
-        // if(req.session.username!==undefined && req.session.username!==null) {
-        //
-        //     console.log(req.body);
+        if(req.session.username!==undefined && req.session.username!==null) {
+
+            console.log(req.body);
             let data = req.body;
-            // data.username = req.session.username;
+            data.username = req.session.username;
 
             kafka.make_request('changestarredstatus_topic', data, function(err,results){
                 console.log('in result');
@@ -157,10 +117,10 @@ router.post('/changestarredstatus', function (req, res, next) {
                     }
                 }
             });
-        // }
-        // else {
-        //     res.status(203).json({"message": "Session Expired. Login again"})
-        // }
+        }
+        else {
+            res.status(203).json({"message": "Session Expired. Login again"})
+        }
     }
     catch (e){
         console.log(e);
@@ -172,11 +132,11 @@ router.post('/getStarredData', function (req, res, next) {
     try {
         console.log(req.session.username);
         try {
-            // if(req.session.username!==undefined && req.session.username!==null) {
-            //
-            //     console.log(req.body);
+            if(req.session.username!==undefined && req.session.username!==null) {
+
+                console.log(req.body);
                 let data = req.body;
-                // data.username = req.session.username;
+                data.username = req.session.username;
 
                 kafka.make_request('retrievestarreddata_topic', data, function(err,results){
                     console.log('in result');
@@ -203,10 +163,10 @@ router.post('/getStarredData', function (req, res, next) {
                         }
                     }
                 });
-            // }
-            // else {
-            //     res.status(203).json({"message": "Session Expired. Login again"})
-            // }
+            }
+            else {
+                res.status(203).json({"message": "Session Expired. Login again"})
+            }
         }
         catch (e){
             console.log(e);
@@ -315,11 +275,11 @@ router.post('/getDataSharedByUser', function (req, res, next) {
 router.post('/fetchDataSharedWithUser', function (req, res, next) {
     try {
         console.log(req.session.username);
-        // if(req.session.username!==undefined && req.session.username!==null) {
+        if(req.session.username!==undefined && req.session.username!==null) {
 
             console.log(req.body);
             let data = req.body;
-            // data.username = req.session.username;
+            data.username = req.session.username;
 
             kafka.make_request('sharedwithuser_topic', data, function(err,results){
                 console.log('in result');
@@ -348,69 +308,9 @@ router.post('/fetchDataSharedWithUser', function (req, res, next) {
                     }
                 }
             });
-        // }
-        // else {
-        //     res.status(203).json({"message": "Session Expired. Login again"})
-        // }
-    }
-    catch (e){
-        console.log(e);
-        res.status(301).send({"message" : e});
-    }
-});
-
-router.post('/accessSelectedSharedData', function (req, res, next) {
-    try {
-        console.log(req.session.username);
-        if(req.session.username!==null || req.session.username!==undefined) {
-            /*let username = req.session.username;
-            let clientPath = req.body.path;
-
-            // dirpath=dirpath.replace("//","/");
-
-            mongo.connect(mongoURL, function () {
-                let sharedetailscoll = mongo.collection("sharedetails");
-                sharedetailscoll.find({sharedwith : username}).toArray(function (err, results) {
-                    if(err){
-                        throw err;
-                    }
-                    if(results.length>0) {
-                        let storagecoll = mongo.collection("dropboxstorage");
-                        for (i = 0; i < results.length; i++) {
-                            let tempObj = {};
-
-                            storagecoll.find({_id : ObjectId(results[i].shareditemid)}).toArray(function (err, results1) {
-                                console.log(results1);
-                                if (err) {
-                                    throw err;
-                                }
-                                for (j=0; j<results1.length;  j++ ) {
-                                    // console.log(results[i].path);
-                                    tempObj["id"] = results1[j]._id;
-                                    tempObj["name"] = results1[j].name;
-                                    tempObj["path"] = results1[j].path;
-                                    tempObj["type"] = results1[j].type;
-                                    tempObj["ctime"] = results1[j].creationtime;
-                                    tempObj["size"] = results1[j].size;
-                                    tempObj["starred"] = results[j].starred;
-                                    tempObj["sharedstatus"] = results1[j].sharedstatus;
-                                    jsonObj.push(tempObj);
-                                }
-                                if(results.length === jsonObj.length) {
-                                    res.status(201).send(jsonObj);
-                                }
-                            })
-
-                        }
-                    }
-                    else {
-                        res.status(204).send({"message":"Directory is Empty"});
-                    }
-                });
-            });*/
         }
-        else{
-            res.status(203).send({"message":"Session Expired. Please Login Again"});
+        else {
+            res.status(203).json({"message": "Session Expired. Login again"})
         }
     }
     catch (e){
@@ -581,9 +481,9 @@ router.post('/downloadfile', function (req, res, next) {
 
 router.post('/getActivityData', function (req, res, next) {
     try {
-        // if(req.session.username!==undefined) {
+        if(req.session.username!==undefined) {
             let data = req.body;
-            // data.username = req.session.username;
+            data.username = req.session.username;
             console.log(data);
 
             kafka.make_request('activity_topic', data, function(err,results){
@@ -611,10 +511,10 @@ router.post('/getActivityData', function (req, res, next) {
                     }
                 }
             });
-        // }
-        // else {
-        //     res.status(203).send({"message":"Session Expired. Login Again"});
-        // }
+        }
+        else {
+            res.status(203).send({"message":"Session Expired. Login Again"});
+        }
     }
     catch (e){
         console.log(e);

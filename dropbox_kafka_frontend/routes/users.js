@@ -48,7 +48,6 @@ router.post('/createDir', function(req, res, next){
     try{
         if(req.session.username!==undefined){
             req.body.username = req.session.username;
-            req.body.service = "createdir";
             console.log(req.body);
             kafka.make_request('createdirectory_topic',req.body, function(err,results){
                 console.log('in result');

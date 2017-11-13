@@ -13,7 +13,8 @@
     "react-native-prompt": "^1.0.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
-    "fs":"^0.0.1-security"
+    "fs":"^0.0.1-security",
+    "mocha": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

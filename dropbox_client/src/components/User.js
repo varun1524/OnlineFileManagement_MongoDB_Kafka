@@ -20,8 +20,6 @@ class User extends Component {
         };
     }
 
-
-
     redirectToFile = ((path) => {
         this.setState({
             path:path

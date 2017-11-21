@@ -1,19 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
 
-var passport = require('passport');
-var cors = require('cors');
+let passport = require('passport');
+let cors = require('cors');
 require('./routes/passport')(passport);
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var signup = require('./routes/signup');
-var group = require('./routes/group');
-var jmetertest = require('./routes/jmetertest');
+let index = require('./routes/index');
+let users = require('./routes/users');
+let signup = require('./routes/signup');
+let group = require('./routes/group');
+let jmetertest = require('./routes/jmetertest');
 
 var mongoSessionURL = "mongodb://localhost:27017/dropbox";
 var expressSessions = require("express-session");
@@ -29,21 +29,21 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 
-var corsOptions = {
+let corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
 };
 app.use(cors(corsOptions));
 
-app.use(bodyParser.json({limit: '5mb'}));
-// app.use(bodyParser.json());
+// app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.urlencoded({ extended: false },{limit: '5mb'}));
-// app.use(bodyParser.raw({limit: '5mb'}) );
-app.use( bodyParser.text({
-    type : 'application/json',
-    limit: '5mb'
-}) );
+app.use(bodyParser.raw({limit: '5mb'}) );
+// app.use( bodyParser.text({
+//     type : 'application/json',
+//     limit: '5mb'
+// }) );
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -66,8 +66,6 @@ app.use('/users', users);
 app.use('/signup', signup);
 app.use('/group', group);
 app.use('/jmetertest', jmetertest);
-
-
 
 app.post('/login/doLogout', function(req,res) {
     console.log(req.session.user);

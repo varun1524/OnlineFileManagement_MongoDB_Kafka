@@ -21,10 +21,15 @@ function ConnectionProvider(topic_name) {
 
     this.getConsumerObj = function(topic_name) {
         // if (!this.kafkaConsumerConnection) {
-        this.client = new kafka.Client("localhost:2181");
+        // this.client = new kafka.Client("localhost:2181");
+        this.client = new kafka.Client("kafka:2181");
         this.kafkaConsumerConnection = new kafka.Consumer(this.client,
             [ { topic: topic_name, partition: 0 }]);
+        // console.log(this.client);
         this.client.on('ready', function () { console.log('client ready!') });
+        this.client.on('brokersChanged', function () { console.log('client brokersChanged!') });
+        this.client.on('error', function () { console.log('client error!') });
+        this.client.on('close', function () { console.log('client close!') });
         // }
         return this.kafkaConsumerConnection;
     };
@@ -33,7 +38,8 @@ function ConnectionProvider(topic_name) {
     this.getProducer = function() {
 
         if (!this.kafkaProducerConnection) {
-            this.client = new kafka.Client("localhost:2181");
+            // this.client = new kafka.Client("localhost:2181");
+            this.client = new kafka.Client("kafka:2181");
             var HighLevelProducer = kafka.HighLevelProducer;
             this.kafkaProducerConnection = new HighLevelProducer(this.client);
             //this.kafkaConnection = new kafka.Producer(this.client);

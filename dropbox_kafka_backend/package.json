@@ -13,7 +13,8 @@
     "passport": "^0.4.0",
     "mongodb": "^2.2.33",
     "passport-local":"^1.0.0",
-    "bcrypt": "^1.0.3",
-    "mongoose": "^4.12.4"
+    "bcrypt": "1.0.3",
+    "mongoose": "^4.12.4",
+    "shelljs": "^0.7.8"
   }
 }

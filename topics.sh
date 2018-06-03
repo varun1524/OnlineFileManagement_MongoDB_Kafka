@@ -30,5 +30,5 @@ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 -
 bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic deletecontentfromgroup_topic
 bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic jmetertest_topic
 bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic response_topic
-bin/kafka-topics.sh --list --zookeeper localhost:21
+bin/kafka-topics.sh --list --zookeeper localhost:2181
 echo "Topics Created Successfully"
